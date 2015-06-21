@@ -1,0 +1,63 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+export DEB_HOST_ARCH_OS   ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+export DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+DESTDIR_DIST := $(CURDIR)/debian/tmp
+
+DEB_CONFIGURE_OPTS = \
+	--prefix=/usr \
+	--mandir=\$${prefix}/share/man \
+	--infodir=\$${prefix}/share/info \
+	--htmldir=\$${prefix}/share/doc/libcoap \
+	--libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
+	--build=$(DEB_BUILD_GNU_TYPE) \
+	--host=$(DEB_HOST_GNU_TYPE) \
+	$(NULL)
+
+PACKAGE_BASE = "libcoap-1-0"
+
+%:
+	dh $@ --parallel
+
+override_dh_auto_clean:
+	dh_clean
+	if [ -f Makefile ]; then \
+		make clean ;\
+	fi
+	for i in `find $(CURDIR) -type f \
+		\( -name "*Makefile" \
+		-o -name "libcoap-1.pc" \
+		-o -name "$(PACKAGE_BASE).dirs" -o -name "$(PACKAGE_BASE)-dev.dirs" \
+		-o -name "$(PACKAGE_BASE).install" -o -name "$(PACKAGE_BASE)-dev.install" \
+		-o -name "coap_config.h" \
+		-o -name ".dirstamp" \
+		-o -name "tags" \
+		-o -name "Doxyfile" \)` ;\
+	do rm -f $$i; done
+	rm -f config.log config.status  libtool stamp-h1
+	for i in `find $(CURDIR) -type d \
+		\( -name ".deps" \)` ;\
+	do rm -rf $$i; done
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(DEB_CONFIGURE_OPTS)
+
+override_dh_auto_install:
+	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' $< > $@ \
+	    debian/$(PACKAGE_BASE).dirs.in > debian/$(PACKAGE_BASE).dirs
+	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' $< > $@ \
+	    debian/$(PACKAGE_BASE).install.in > debian/$(PACKAGE_BASE).install
+	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' $< > $@ \
+	    debian/$(PACKAGE_BASE)-dev.dirs.in > debian/$(PACKAGE_BASE)-dev.dir
+	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' $< > $@ \
+	    debian/$(PACKAGE_BASE)-dev.install.in > debian/$(PACKAGE_BASE)-dev.install
+	DESTDIR=$(DESTDIR_DIST) $(MAKE) install
+
+override_dh_auto_test:

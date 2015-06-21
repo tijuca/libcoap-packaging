@@ -1,0 +1,58 @@
+Source: libcoap
+Section: libs
+Priority: optional
+Maintainer: Carsten Schoenert <c.schoenert@t-online.de>
+Build-Depends: asciidoc,
+  debhelper (>= 9.0.0),
+  exuberant-ctags,
+  doxygen,
+  graphviz,
+  xmlto
+Standards-Version: 3.9.6
+Homepage: http://sourceforge.net/projects/libcoap/
+
+Package: libcoap-1-0
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: C-Implementation of CoAP
+ Lightweight application-protocol for devices that are constrained their
+ resources such as computing power, RF range, memory, bandwidth, or network
+ packet sizes. This protocol, CoAP, is developed in the IETF working group
+ "CoRE", <http://6lowapp.net> and was standardized in RFC 7252.
+
+Package: libcoap-1-0-bin
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends},
+  libcoap-1-0 (= ${binary:Version})
+Description: C-Implementation of CoAP - example binarys
+ The libcoap provide some example binary files to show the usage of  a CoAP
+ Server, CoAP Client and a Resource Directory implemenation. These examples
+ heavily rely on the libcoap as the core functionality is based there.
+ .
+ This package provides the following example binarys:
+  * coap-client
+    A command-line client that allows you to interact with CoAP reasources.
+ .
+  * coap-server
+    Simple server that can provide CoAP resource for simple testing cases.
+ .
+  * coap-rd
+    This binary let you simulate various CoAP resources mostly for testing
+    purpose.
+ .
+ You can use these files without any exception no matter as they named
+ examples. Please see the respectives man pages for usage instructions.
+
+Package: libcoap-1-0-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends},
+  libcoap-1-0 (= ${binary:Version})
+Description: C-Implementation of CoAP - development files
+ Lightweight application-protocol for devices that are constrained their
+ resources such as computing power, RF range, memory, bandwidth, or network
+ packet sizes. This protocol, CoAP, is developed in the IETF working group
+ "CoRE", <http://6lowapp.net> and was standardized in RFC 7252.
+ .
+ This package contains the developer files like headers, the static library
+ and the pkg-config file.

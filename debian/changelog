@@ -1,0 +1,7 @@
+libcoap (4.1.2~rc+git20150621-1) experimental; urgency=medium
+
+  [ Carsten Schoenert ]
+  * Initial release (Closes: #774928)
+  * [fd6ea09] Imported Upstream version 4.1.2~rc+git20150621
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Sun, 21 Jun 2015 17:36:34 +0200
