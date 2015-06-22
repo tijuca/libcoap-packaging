@@ -107,24 +107,40 @@ OPTIONS
 
 EXAMPLES
 --------
-*coap-client coap://coap.me*::
-   Query resource '/' from server 'coap.me' via the GET method.
+* Example 1
+----
+coap-client coap://coap.me
+----
+Query resource '/' from server 'coap.me' via the GET method.
 
-*coap-client -m get coap://[::1]/*::
-   Query on localhost via the GET method.
+* Example 2
+----
+coap-client -m get coap://[::1]/
+----
+Query on localhost via the GET method.
 
-*coap-client -m get coap://[::1]/.well-known/core*::
-   Quite the same, except on the resource '.well-known/core' on localhost.
+* Example 3
+----
+coap-client -m get coap://[::1]/.well-known/core
+----
+Quite the same, except on the resource '.well-known/core' on localhost.
 
-*echo -n "mode=on" | coap-client -m put coap://[2001:db8:c001:f00d:221:2eff:ff00:2704]:5683/actuators/leds?color=r -f-*::
-   Send text "mode=on" to resource 'actuators/leds?color=r' on the endpoint
-   with address '2001:db8:c001:f00d:221:2eff:ff00:2704' and port '5683'. Note
-   that the port 5683 is the default port and isn't really needed to append.
+* Example 4
+----
+echo -n "mode=on" | coap-client -m put \
+coap://[2001:db8:c001:f00d:221:2eff:ff00:2704]:5683/actuators/leds?color=r -f-
+----
+Send text "mode=on" to resource 'actuators/leds?color=r' on the endpoint with
+address '2001:db8:c001:f00d:221:2eff:ff00:2704' and port '5683'. Note that the
+port 5683 is the default port and isn't really needed to append.
 
-*coap-client -m put coap://[fec0::3]/ck -T 3a -t binary -f to_upload*::
-   Put the contents of file 'to_upload' with content type 'binary'
-   (i.e. application/octet-stream) into resource 'ck' on 'fec0::3' by usage
-   of a token '3a'.
+* Example 5
+----
+coap-client -m put coap://[fec0::3]/ck -T 3a -t binary -f to_upload
+----
+Put the contents of file 'to_upload' with content type 'binary' (i.e.
+application/octet-stream) into resource 'ck' on 'fec0::3' by usage of a token
+'3a'.
 
 FILES
 ------

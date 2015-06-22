@@ -19,7 +19,7 @@ SYNOPSIS
 DESCRIPTION
 -----------
 *coap-server* is a CoAP server which simulate 6LoWPAN devices which can be
-talked via the CoAP protocol.
+addressed via the CoAP protocol.
 
 OPTIONS
 -------
@@ -27,10 +27,10 @@ OPTIONS
    The local address of the interface which the server has to listen.
 
 *-g* group::
-   Join specified multicast group on startup.
+   Join specified multicast 'group' on startup.
 
 *-p* port::
-   The *port* on the given address the server will be waitung for connections.
+   The 'port' on the given address the server will be waitung for connections.
    The default port is 5683 if not given any other value.
 
 *-v* num::
@@ -38,20 +38,32 @@ OPTIONS
 
 EXAMPLES
 --------
-*coap-server -A ::1*::
-   Let the server listen on localhost.
+* Example
+----
+coap-server -A ::1
+----
+Let the server listen on localhost (port 5683).
 
-*coap-server -A ::1 -p 13011*::
-   Quite the same, except listening port is 13011 (and not the default port
-   5683).
+* Example
+----
+coap-server -A ::1 -p 13011
+----
+Quite the same, except listening port is '13011' (and not the default port
+5683).
 
-*coap-server -A 2001:db8:81a8:0:6ef0:dead:feed:beef  -v 5*::
-   The listening address is set to '2001:db8:81a8:0:6ef0:dead:feed:beef' and
-   the verbosity level is set to '5'.
+* Example
+----
+coap-server -A 2001:db8:81a8:0:6ef0:dead:feed:beef  -v 5
+----
+The listening address is set to '2001:db8:81a8:0:6ef0:dead:feed:beef' and the
+verbosity level is set to '5'.
 
-*coap-server -A 2001:db8:81a8:0:6ef0:dead:feed:beef  -g FF02:FD*::
-   Set listening address to '2001:db8:81a8:0:6ef0:dead:feed:beef' and
-   join the All CoAP Nodes multicast group (FF0x:FD).
+* Example
+----
+coap-server -A 2001:db8:81a8:0:6ef0:dead:feed:beef  -g FF02:FD
+----
+Set listening address to '2001:db8:81a8:0:6ef0:dead:feed:beef' and join the
+All CoAP Nodes multicast group 'FF02:FD'.
 
 FILES
 ------
