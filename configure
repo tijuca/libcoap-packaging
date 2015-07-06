@@ -854,6 +854,7 @@ LDFLAGS
 LIBS
 CPPFLAGS
 CPP
+A2X
 CTAGS_PROG'
 
 
@@ -1506,6 +1507,7 @@ Some influential environment variables:
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
+  A2X         a2x command
   CTAGS_PROG  the 'ctag' program to use for make target 'update-map-file'
 
 Use these variables to override the choices made by `configure' or to help
@@ -12276,6 +12278,7 @@ fi
 
 
 if test "x$build_examples" = "xyes"; then
+
 	# Extract the first word of "a2x", so it can be a program name with args.
 set dummy a2x; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5

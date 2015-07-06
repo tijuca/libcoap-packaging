@@ -1,9 +1,10 @@
-/* prng.h -- Pseudo Random Numbers
+/*
+ * prng.h -- Pseudo Random Numbers
  *
- * Copyright (C) 2010,2011 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010-2011 Olaf Bergmann <bergmann@tzi.org>
  *
- * This file is part of the CoAP library libcoap. Please see
- * README for terms of use.
+ * This file is part of the CoAP library libcoap. Please see README for terms
+ * of use.
  */
 
 /**
@@ -13,8 +14,6 @@
 
 #ifndef _COAP_PRNG_H_
 #define _COAP_PRNG_H_
-
-#include "coap_config.h"
 
 /**
  * @defgroup prng Pseudo Random Numbers

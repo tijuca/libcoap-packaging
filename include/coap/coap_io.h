@@ -1,28 +1,17 @@
-/* coap_io.h -- Default network I/O functions for libcoap
+/*
+ * coap_io.h -- Default network I/O functions for libcoap
  *
- * Copyright (C) 2012--2013 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2012-2013 Olaf Bergmann <bergmann@tzi.org>
  *
- * This file is part of the CoAP library libcoap. Please see
- * README for terms of use.
+ * This file is part of the CoAP library libcoap. Please see README for terms
+ * of use.
  */
 
 #ifndef _COAP_IO_H_
 #define _COAP_IO_H_
 
-#include "coap_config.h"
-
-#ifdef HAVE_ASSERT_H
 #include <assert.h>
-#else
-#ifndef assert
-#warning "assertions are disabled"
-#  define assert(x)
-#endif
-#endif
-
-#ifdef HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+#include <sys/types.h>
 
 #include "address.h"
 
@@ -57,7 +46,8 @@ typedef struct coap_endpoint_t {
 
 #ifdef WITH_LWIP
   struct udp_pcb *pcb;
- /**< @FIXME this was added in a hurry, not sure it confirms to the overall model --chrysn */
+ /**< @FIXME --chrysn
+  * this was added in a hurry, not sure it confirms to the overall model */
   struct coap_context_t *context;
 #endif /* WITH_LWIP */
 

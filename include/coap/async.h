@@ -1,9 +1,10 @@
-/* async.h -- state management for asynchronous messages
+/*
+ * async.h -- state management for asynchronous messages
  *
- * Copyright (C) 2010,2011 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010-2011 Olaf Bergmann <bergmann@tzi.org>
  *
- * This file is part of the CoAP library libcoap. Please see
- * README for terms of use.
+ * This file is part of the CoAP library libcoap. Please see README for terms
+ * of use.
  */
 
 /**
@@ -11,11 +12,9 @@
  * @brief State management for asynchronous messages
  */
 
-
 #ifndef _COAP_ASYNC_H_
 #define _COAP_ASYNC_H_
 
-#include "coap_config.h"
 #include "net.h"
 
 #ifndef WITHOUT_ASYNC
@@ -31,14 +30,14 @@
  */
 typedef struct coap_async_state_t {
   unsigned char flags;  /**< holds the flags to control behaviour */
- 
+
   /**
    * Holds the internal time when the object was registered with a
    * resource. This field will be updated whenever
    * coap_register_async() is called for a specific resource.
    */
   coap_tick_t created;
- 
+
   /**
    * This field can be used to register opaque application data with the
    * asynchronous state object.

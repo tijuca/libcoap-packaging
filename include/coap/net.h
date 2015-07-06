@@ -1,50 +1,31 @@
-/* net.h -- CoAP network interface
+/*
+ * net.h -- CoAP network interface
  *
- * Copyright (C) 2010--2015 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010-2015 Olaf Bergmann <bergmann@tzi.org>
  *
- * This file is part of the CoAP library libcoap. Please see
- * README for terms of use.
+ * This file is part of the CoAP library libcoap. Please see README for terms
+ * of use.
  */
 
 #ifndef _COAP_NET_H_
 #define _COAP_NET_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "coap_config.h"
-
-#ifdef HAVE_ASSERT_H
 #include <assert.h>
-#else
-#ifndef assert
-#warning "assertions are disabled"
-#  define assert(x)
-#endif
-#endif
-
+#include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_NETINET_IN_H
-#include <netinet/in.h>
-#endif
-#ifdef HAVE_TIME_H
-#include <time.h>
-#endif
-#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
+#include <time.h>
 
 #ifdef WITH_LWIP
 #include <lwip/ip_addr.h>
 #endif
 
-#include "option.h"
 #include "coap_io.h"
-#include "prng.h"
-#include "pdu.h"
 #include "coap_time.h"
+#include "option.h"
+#include "pdu.h"
+#include "prng.h"
 
 struct coap_queue_t;
 
@@ -174,7 +155,6 @@ coap_register_option(coap_context_t *ctx, unsigned char type) {
   coap_option_setb(ctx->known_options, type);
 }
 
-
 /**
  * Set sendqueue_basetime in the given context object @p ctx to @p now. This
  * function returns the number of elements in the queue head that have timed
@@ -216,7 +196,7 @@ coap_new_message_id(coap_context_t *context) {
 #endif
 }
 
-/*
+/**
  * CoAP stack context must be released with coap_free_context(). This function
  * clears all entries from the receive queue and send queue and deletes the
  * resources that have been registered with @p context, and frees the attached
@@ -538,9 +518,5 @@ int coap_option_check_critical(coap_context_t *ctx,
  */
 coap_pdu_t *coap_wellknown_response(coap_context_t *context,
                                     coap_pdu_t *request);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _COAP_NET_H_ */
