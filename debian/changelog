@@ -1,3 +1,10 @@
+libcoap (4.1.2~rc+git20150622-1) experimental; urgency=medium
+
+  [ Carsten Schoenert ]
+  * [3a54aeb] Imported Upstream version 4.1.2~rc+git20150622
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Mon, 22 Jun 2015 18:50:40 +0200
+
 libcoap (4.1.2~rc+git20150621-1) experimental; urgency=medium
 
   [ Carsten Schoenert ]
