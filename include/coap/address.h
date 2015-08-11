@@ -1,9 +1,10 @@
-/* address.h -- representation of network addresses
+/*
+ * address.h -- representation of network addresses
  *
- * Copyright (C) 2010,2011,2015 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010-2011,2015 Olaf Bergmann <bergmann@tzi.org>
  *
- * This file is part of the CoAP library libcoap. Please see
- * README for terms of use.
+ * This file is part of the CoAP library libcoap. Please see README for terms
+ * of use.
  */
 
 /**
@@ -14,27 +15,11 @@
 #ifndef _COAP_ADDRESS_H_
 #define _COAP_ADDRESS_H_
 
-#include "coap_config.h"
-
-#ifdef HAVE_ASSERT_H
 #include <assert.h>
-#else
-#ifndef assert
-#warning "assertions are disabled"
-#  define assert(x)
-#endif
-#endif
-
-#include <string.h>
-#include <stdint.h>
-
-#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
-#endif
-
-#ifdef HAVE_NETINET_IN_H
+#include <stdint.h>
+#include <string.h>
 #include <sys/socket.h>
-#endif
 
 #ifdef WITH_LWIP
 #include <lwip/ip_addr.h>

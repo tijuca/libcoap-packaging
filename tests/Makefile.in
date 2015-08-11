@@ -114,7 +114,7 @@ am__testdriver_SOURCES_DIST = testdriver.c test_error_response.c \
 @HAVE_CUNIT_TRUE@	testdriver-test_uri.$(OBJEXT) \
 @HAVE_CUNIT_TRUE@	testdriver-test_wellknown.$(OBJEXT)
 testdriver_OBJECTS = $(am_testdriver_OBJECTS)
-@HAVE_CUNIT_TRUE@testdriver_DEPENDENCIES = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).a
+@HAVE_CUNIT_TRUE@testdriver_DEPENDENCIES = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -327,7 +327,7 @@ top_srcdir = @top_srcdir@
 @HAVE_CUNIT_TRUE@ test_uri.c \
 @HAVE_CUNIT_TRUE@ test_wellknown.c
 
-@HAVE_CUNIT_TRUE@testdriver_LDADD = @CUNIT_LIBS@ @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).a
+@HAVE_CUNIT_TRUE@testdriver_LDADD = @CUNIT_LIBS@ @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 
 # If there is a API change to something $(LIBCOAP_API_VERSION) > 1 there is
 # nothing to adopt here. No needed to implement something here because the test

@@ -37,8 +37,8 @@ OPTIONS
 *-b* [num,]size::
    The block size to be used in GET/PUT/POST requests (value must be a
    multiple of 16 not larger than 1024 as libcoap uses a fixed maximum
-   PDU size of 1400 bytes). If *num* is present, the request
-   chain will start at block *num*. When the server includes a Block2
+   PDU size of 1400 bytes). If 'num' is present, the request
+   chain will start at block 'num'. When the server includes a Block2
    option in its response to a GET request, coap-client will automatically
    retrieve the subsequent block from the server until there are no more
    outstanding blocks for the requested content.
@@ -60,11 +60,11 @@ OPTIONS
    The port to listen on.
 
 *-s* duration::
-   Subscribe to the resource specified by URI for the given duration in
+   Subscribe to the resource specified by URI for the given 'duration' in
    seconds.
 
 *-t* type::
-   Content format for given resource for PUT/POST. *type* must be either
+   Content format for given resource for PUT/POST. 'type' must be either
    a numeric value reflecting a valid CoAP content format or a string
    describing a registered format. The following registered content format
    descriptors are supported, with alternative shortcuts given in
@@ -84,7 +84,7 @@ OPTIONS
 *-A* type::
    Accepted media types as comma-separated list of symbolic or numeric
    values, there are multiple arguments as comma separated list
-   possible. *type* must be either a numeric value reflecting a valid
+   possible. 'type' must be either a numeric value reflecting a valid
    CoAP content format or a string that specifies a registered format as
    described for option *-t*.
 
@@ -96,51 +96,51 @@ OPTIONS
    confirmable message will be sent.
 
 *-O* num,text::
-   Add option *num* with contents of *text* to the request.
+   Add option 'num' with contents of 'text' to the request.
 
 *-P* addr[:port]::
    Address (and port) for proxy to use (automatically adds Proxy-Uri option
    to request).
 
 *-T* token::
-   Include the *token* to the request.
+   Include the 'token' to the request.
 
 EXAMPLES
 --------
-* Example 1
+* Example
 ----
 coap-client coap://coap.me
 ----
-Query resource '/' from server 'coap.me' via the GET method.
+Query resource '/' from server 'coap.me' (via the GET method).
 
-* Example 2
+* Example
 ----
 coap-client -m get coap://[::1]/
 ----
-Query on localhost via the GET method.
+Query on localhost via the 'GET' method.
 
-* Example 3
+* Example
 ----
 coap-client -m get coap://[::1]/.well-known/core
 ----
 Quite the same, except on the resource '.well-known/core' on localhost.
 
-* Example 4
+* Example
 ----
 echo -n "mode=on" | coap-client -m put \
 coap://[2001:db8:c001:f00d:221:2eff:ff00:2704]:5683/actuators/leds?color=r -f-
 ----
-Send text "mode=on" to resource 'actuators/leds?color=r' on the endpoint with
+Send text 'mode=on' to resource 'actuators/leds?color=r' on the endpoint with
 address '2001:db8:c001:f00d:221:2eff:ff00:2704' and port '5683'. Note that the
-port 5683 is the default port and isn't really needed to append.
+port '5683' is the default port and isn't really needed to append.
 
-* Example 5
+* Example
 ----
 coap-client -m put coap://[fec0::3]/ck -T 3a -t binary -f to_upload
 ----
 Put the contents of file 'to_upload' with content type 'binary' (i.e.
 application/octet-stream) into resource 'ck' on 'fec0::3' by usage of a token
-'3a'.
+'3a' via the 'PUT' method.
 
 FILES
 ------
