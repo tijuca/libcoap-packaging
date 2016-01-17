@@ -1,0 +1,19 @@
+From: Carsten Schoenert <c.schoenert@t-online.de>
+Date: Sat, 2 Apr 2016 22:03:17 +0200
+Subject: libcoap-1.pc.in: adding missed API version
+
+---
+ libcoap-1.pc.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libcoap-1.pc.in b/libcoap-1.pc.in
+index 4a03189..8d1f313 100644
+--- a/libcoap-1.pc.in
++++ b/libcoap-1.pc.in
+@@ -7,5 +7,5 @@ Name: @PACKAGE_NAME@
+ Description: C-Implementation of CoAP.
+ Version: @PACKAGE_VERSION@
+ URL: @PACKAGE_URL@
+-Libs: -L${libdir} -lcoap
++Libs: -L${libdir} -lcoap-@LIBCOAP_API_VERSION@
+ Cflags: -I${includedir}/coap

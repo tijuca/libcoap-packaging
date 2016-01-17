@@ -1,0 +1,50 @@
+From: Carsten Schoenert <c.schoenert@t-online.de>
+Date: Sun, 17 Jan 2016 18:14:49 +0100
+Subject: add field 'revdate' to asciidoc files for manpages
+
+For reproducibility we need to set up a date that's not depending on the
+current time and timezone. We add a extra control field 'revdate' and
+expand the variable behin that while building the package with the date
+from the changelog file.
+---
+ examples/coap-client.txt.in | 1 +
+ examples/coap-rd.txt.in     | 1 +
+ examples/coap-server.txt.in | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/examples/coap-client.txt.in b/examples/coap-client.txt.in
+index 88117bd..0e9c354 100644
+--- a/examples/coap-client.txt.in
++++ b/examples/coap-client.txt.in
+@@ -4,6 +4,7 @@
+ coap-client(5)
+ ==============
+ :doctype: manpage
++:revdate: @REVDATE@
+ :man source:   coap-client
+ :man version:  @PACKAGE_VERSION@
+ :man manual:   coap-client Manual
+diff --git a/examples/coap-rd.txt.in b/examples/coap-rd.txt.in
+index 762609c..3de698f 100644
+--- a/examples/coap-rd.txt.in
++++ b/examples/coap-rd.txt.in
+@@ -4,6 +4,7 @@
+ coap-rd(5)
+ ==========
+ :doctype: manpage
++:revdate: @REVDATE@
+ :man source:   coap-rd
+ :man version:  @PACKAGE_VERSION@
+ :man manual:   coap-rd Manual
+diff --git a/examples/coap-server.txt.in b/examples/coap-server.txt.in
+index c15741e..b89b6c1 100644
+--- a/examples/coap-server.txt.in
++++ b/examples/coap-server.txt.in
+@@ -4,6 +4,7 @@
+ coap-server(5)
+ ==============
+ :doctype: manpage
++:revdate: @REVDATE@
+ :man source:   coap-server
+ :man version:  @PACKAGE_VERSION@
+ :man manual:   coap-server Manual
