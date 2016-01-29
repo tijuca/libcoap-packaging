@@ -1,18 +1,19 @@
 /* resource.c -- generic resource handling
  *
- * Copyright (C) 2010--2014 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010--2015 Olaf Bergmann <bergmann@tzi.org>
  *
  * This file is part of the CoAP library libcoap. Please see
  * README for terms of use. 
  */
 
 #include "coap_config.h"
-#include "utlist.h"
+#include "coap.h"
+#include "debug.h"
 #include "mem.h"
 #include "net.h"
-#include "debug.h"
 #include "resource.h"
 #include "subscribe.h"
+#include "utlist.h"
 
 #ifdef WITH_LWIP
 /* mem.h is only needed for the string free calls for
@@ -646,7 +647,8 @@ coap_notify_observers(coap_context_t *context, coap_resource_t *r) {
       token.s = obs->token;
 
       response->hdr->id = coap_new_message_id(context);
-      if (obs->non && obs->non_cnt < COAP_OBS_MAX_NON) {
+      if ((r->flags & COAP_RESOURCE_FLAGS_NOTIFY_CON) == 0
+	  && obs->non_cnt < COAP_OBS_MAX_NON) {
 	response->hdr->type = COAP_MESSAGE_NON;
       } else {
 	response->hdr->type = COAP_MESSAGE_CON;

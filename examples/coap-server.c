@@ -3,7 +3,7 @@
 /* coap -- simple implementation of the Constrained Application Protocol (CoAP)
  *         as defined in RFC 7252
  *
- * Copyright (C) 2010--2015 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010--2016 Olaf Bergmann <bergmann@tzi.org>
  *
  * This file is part of the CoAP library libcoap. Please see README for terms
  * of use.
@@ -62,8 +62,8 @@ handle_sigint(int signum UNUSED_PARAM) {
   quit = 1;
 }
 
-#define INDEX "This is a test server made with libcoap (see http://libcoap.sf.net)\n" \
-              "Copyright (C) 2010--2013 Olaf Bergmann <bergmann@tzi.org>\n\n"
+#define INDEX "This is a test server made with libcoap (see https://libcoap.net)\n" \
+              "Copyright (C) 2010--2016 Olaf Bergmann <bergmann@tzi.org>\n\n"
 
 static void
 hnd_get_index(coap_context_t *ctx UNUSED_PARAM,
@@ -299,7 +299,7 @@ init_resources(coap_context_t *ctx) {
   /* store clock base to use in /time */
   my_clock_base = clock_offset;
 
-  r = coap_resource_init((unsigned char *)"time", 4, 0);
+  r = coap_resource_init((unsigned char *)"time", 4, COAP_RESOURCE_FLAGS_NOTIFY_CON);
   coap_register_handler(r, COAP_REQUEST_GET, hnd_get_time);
   coap_register_handler(r, COAP_REQUEST_PUT, hnd_put_time);
   coap_register_handler(r, COAP_REQUEST_DELETE, hnd_delete_time);

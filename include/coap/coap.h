@@ -1,7 +1,7 @@
 /*
- * coap.h -- main header file for CoAP stack
+ * coap.h -- main header file for CoAP stack of libcoap
  *
- * Copyright (C) 2010-2012,2015 Olaf Bergmann <bergmann@tzi.org>
+ * Copyright (C) 2010-2012,2015-2016 Olaf Bergmann <bergmann@tzi.org>
  *               2015 Carsten Schoenert <c.schoenert@t-online.de>
  *
  * This file is part of the CoAP library libcoap. Please see README for terms
@@ -10,6 +10,8 @@
 
 #ifndef _COAP_H_
 #define _COAP_H_
+
+#include "libcoap.h"
 
 /* Define the address where bug reports for libcoap should be sent. */
 #define LIBCOAP_PACKAGE_BUGREPORT libcoap-developers@lists.sourceforge.net
@@ -21,7 +23,7 @@
 #define LIBCOAP_PACKAGE_STRING libcoap 4.1.2
 
 /* Define the home page for libcoap. */
-#define LIBCOAP_PACKAGE_URL http://libcoap.sourceforge.net/
+#define LIBCOAP_PACKAGE_URL https://libcoap.net/
 
 /* Define the version of libcoap this file belongs to. */
 #define LIBCOAP_PACKAGE_VERSION 4.1.2
@@ -46,7 +48,6 @@ extern "C" {
 #include "resource.h"
 #include "str.h"
 #include "subscribe.h"
-#include "t_list.h"
 #include "uri.h"
 #include "uthash.h"
 #include "utlist.h"

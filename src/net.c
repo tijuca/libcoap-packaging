@@ -379,19 +379,6 @@ coap_new_context(
   /* initialize message id */
   prng((unsigned char *)&c->message_id, sizeof(unsigned short));
 
-  /* register the critical options that we know */
-  coap_register_option(c, COAP_OPTION_IF_MATCH);
-  coap_register_option(c, COAP_OPTION_URI_HOST);
-  coap_register_option(c, COAP_OPTION_IF_NONE_MATCH);
-  coap_register_option(c, COAP_OPTION_URI_PORT);
-  coap_register_option(c, COAP_OPTION_URI_PATH);
-  coap_register_option(c, COAP_OPTION_URI_QUERY);
-  coap_register_option(c, COAP_OPTION_ACCEPT);
-  coap_register_option(c, COAP_OPTION_PROXY_URI);
-  coap_register_option(c, COAP_OPTION_PROXY_SCHEME);
-  coap_register_option(c, COAP_OPTION_BLOCK2);
-  coap_register_option(c, COAP_OPTION_BLOCK1);
-
   c->endpoint = coap_new_endpoint(listen_addr, COAP_ENDPOINT_NOSEC);
 #ifdef WITH_LWIP
   c->endpoint->context = c;
@@ -471,17 +458,34 @@ coap_option_check_critical(coap_context_t *ctx,
      * the largest known option, we know that everything beyond is
      * bad.
      */
-    if (opt_iter.type & 0x01 && 
-	coap_option_getb(ctx->known_options, opt_iter.type) < 1) {
-      debug("unknown critical option %d\n", opt_iter.type);
-      
-      ok = 0;
-
-      /* When opt_iter.type is beyond our known option range,
-       * coap_option_setb() will return -1 and we are safe to leave
-       * this loop. */
-      if (coap_option_setb(unknown, opt_iter.type) == -1)
+    if (opt_iter.type & 0x01) {
+      /* first check the built-in critical options */
+      switch (opt_iter.type) {
+      case COAP_OPTION_IF_MATCH:
+      case COAP_OPTION_URI_HOST:
+      case COAP_OPTION_IF_NONE_MATCH:
+      case COAP_OPTION_URI_PORT:
+      case COAP_OPTION_URI_PATH:
+      case COAP_OPTION_URI_QUERY:
+      case COAP_OPTION_ACCEPT:
+      case COAP_OPTION_PROXY_URI:
+      case COAP_OPTION_PROXY_SCHEME:
+      case COAP_OPTION_BLOCK2:
+      case COAP_OPTION_BLOCK1:
 	break;
+      default:
+	if (coap_option_filter_get(ctx->known_options, opt_iter.type) <= 0) {
+	  debug("unknown critical option %d\n", opt_iter.type);
+	  ok = 0;
+
+	  /* When opt_iter.type is beyond our known option range,
+	   * coap_option_filter_set() will return -1 and we are safe to leave
+	   * this loop. */
+	  if (coap_option_filter_set(unknown, opt_iter.type) == -1) {
+	    break;
+	  }
+	}
+      }
     }
   }
 
@@ -1169,6 +1173,15 @@ coap_wellknown_response(coap_context_t *context, coap_pdu_t *request) {
   query_filter = coap_check_option(request, COAP_OPTION_URI_QUERY, &opt_iter);
   wkc_len = get_wkc_len(context, query_filter);
 
+  /* The value of some resources is undefined and get_wkc_len will return 0.*/
+  if (wkc_len == 0){
+    debug("coap_wellknown_response: undefined resource\n");
+    /* set error code 4.00 Bad Request*/
+    resp->hdr->code = COAP_RESPONSE_CODE(400);
+    resp->length = sizeof(coap_hdr_t) + resp->hdr->token_length;
+    return resp;
+  }
+
   /* check whether the request contains the Block2 option */
   if (coap_get_block(request, COAP_OPTION_BLOCK2, &block)) {
     debug("create block\n");
@@ -1429,7 +1442,6 @@ handle_request(coap_context_t *context, coap_queue_t *node) {
 	    subscription = coap_add_observer(resource, &node->local_if, 
 					     &node->remote, &token);
 	    if (subscription) {
-	      subscription->non = node->pdu->hdr->type == COAP_MESSAGE_NON;
 	      coap_touch_observer(context, &node->remote, &token);
 	    }
 	  }
@@ -1502,7 +1514,7 @@ handle_response(coap_context_t *context,
 			   rcvd->pdu->hdr->token, 
 			   rcvd->pdu->hdr->token_length);
 
-  /* Call application-specific reponse handler when available. */
+  /* Call application-specific response handler when available. */
   if (context->response_handler) {
     context->response_handler(context, &rcvd->local_if,
 			      &rcvd->remote, sent ? sent->pdu : NULL, 
@@ -1589,11 +1601,11 @@ coap_dispatch(coap_context_t *context, coap_queue_t *rcvd) {
 	  coap_new_error_response(rcvd->pdu, COAP_RESPONSE_CODE(402), opt_filter);
 
 	if (!response)
-	  warn("coap_dispatch: cannot create error reponse\n");
+	  warn("coap_dispatch: cannot create error response\n");
 	else {
 	  if (coap_send(context, &rcvd->local_if, &rcvd->remote, response) 
 	      == COAP_INVALID_TID) {
-	    warn("coap_dispatch: error sending reponse\n");
+	    warn("coap_dispatch: error sending response\n");
 	  }
           coap_delete_pdu(response);
 	}	 

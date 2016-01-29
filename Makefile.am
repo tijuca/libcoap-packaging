@@ -81,6 +81,7 @@ libcoap_include_HEADERS = \
    include/coap/debug.h \
    include/coap/encode.h \
    include/coap/hashkey.h \
+   include/coap/libcoap.h \
    include/coap/mem.h \
    include/coap/net.h \
    include/coap/option.h \
@@ -89,7 +90,6 @@ libcoap_include_HEADERS = \
    include/coap/resource.h \
    include/coap/str.h \
    include/coap/subscribe.h \
-   include/coap/t_list.h \
    include/coap/uri.h \
    include/coap/uthash.h \
    include/coap/utlist.h
