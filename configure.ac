@@ -13,8 +13,8 @@ m4_define([libcoap_micro_version], [2])
 
 m4_define([libcoap_version],[libcoap_major_version.libcoap_minor_version.libcoap_micro_version])
 
-AC_INIT([libcoap], [libcoap_version], [libcoap-developers@lists.sourceforge.net], [libcoap], [http://libcoap.sourceforge.net/])
-AC_PREREQ([2.59])
+AC_INIT([libcoap], [libcoap_version], [libcoap-developers@lists.sourceforge.net], [libcoap], [https://libcoap.net/])
+AC_PREREQ([2.64])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define no-dist-gzip dist-bzip2])
 
 # Generate one configuration header file for building the library itself with
@@ -24,8 +24,9 @@ AC_CONFIG_HEADERS([coap_config.h])
 
 AC_PROG_CC
 AM_PROG_CC_C_O
-AM_PROG_AR
 AC_CONFIG_MACRO_DIR([m4])
+m4_pattern_allow([AM_PROG_AR])
+AM_PROG_AR
 
 # enable the automatically build of shared and static libraries, the unit
 # tests needs the static library
@@ -187,6 +188,7 @@ if test "x$build_documentation" = "xyes"; then
 		fi
 	fi
 fi
+AM_CONDITIONAL(BUILD_DOCUMENTATION, [test "x$build_documentation" = "xyes"])
 
 AM_CONDITIONAL([HAVE_DOXYGEN],
 	[test -n "$DOXYGEN"])AM_COND_IF([HAVE_DOXYGEN],
@@ -235,16 +237,16 @@ AC_ARG_ENABLE([examples],
               [build_examples="$enableval"],
               [build_examples="yes"])
 
-if test "x$build_examples" = "xyes"; then
+if test "x$build_examples" = "xyes" -a "x$build_documentation" = "xyes"; then
 	AC_ARG_VAR([A2X], [a2x command])
 	AC_PATH_PROG([A2X], [a2x])
 	if test "x$A2X" = "x"; then
 		AC_MSG_WARN([==> You want to build the examples binaries, that is also including the respective manpages but a2x was not found!])
 		AC_MSG_ERROR([==> Install the package that contains the a2x binary or disable the build of the examples using --disable-examples.])
 	fi
-	BUILD_EXAMPLES="YES"
+	build_examples="yes"
 fi
-AM_CONDITIONAL(BUILD_EXAMPLES, [test "x$build_examples" != "x"])
+AM_CONDITIONAL(BUILD_EXAMPLES, [test "x$build_examples" = "xyes"])
 
 # end configure options
 #######################
@@ -378,5 +380,11 @@ else
 fi
 if test "x$build_examples" = "xyes"; then
 	AC_MSG_RESULT([      build examples          : "yes"])
-	AC_MSG_RESULT([             -->  a2x around  : "yes" ($A2X)])
+	if test "x$A2X" != "x"; then
+		AC_MSG_RESULT([             -->  use a2x     : "yes" ($A2X)])
+	else
+		AC_MSG_RESULT([             -->  use a2x     : "no"])
+	fi
+else
+	AC_MSG_RESULT([      build examples          : "no"])
 fi

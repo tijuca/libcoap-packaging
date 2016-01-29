@@ -16,10 +16,8 @@
 #define _COAP_ADDRESS_H_
 
 #include <assert.h>
-#include <netinet/in.h>
 #include <stdint.h>
 #include <string.h>
-#include <sys/socket.h>
 
 #ifdef WITH_LWIP
 #include <lwip/ip_addr.h>

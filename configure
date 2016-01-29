@@ -653,7 +653,7 @@ PACKAGE_TARNAME='libcoap'
 PACKAGE_VERSION='4.1.2'
 PACKAGE_STRING='libcoap 4.1.2'
 PACKAGE_BUGREPORT='libcoap-developers@lists.sourceforge.net'
-PACKAGE_URL='http://libcoap.sourceforge.net/'
+PACKAGE_URL='https://libcoap.net/'
 
 # Factoring default headers for most tests.
 ac_includes_default="\
@@ -705,6 +705,8 @@ HAVE_CUNIT_TRUE
 CUNIT_LIBS
 HAVE_DOXYGEN_FALSE
 HAVE_DOXYGEN_TRUE
+BUILD_DOCUMENTATION_FALSE
+BUILD_DOCUMENTATION_TRUE
 USE_CALL_GRAPH
 HAVE_DOT
 DOT
@@ -810,6 +812,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -894,6 +897,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1146,6 +1150,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1283,7 +1296,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1436,6 +1449,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1514,7 +1528,7 @@ Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <libcoap-developers@lists.sourceforge.net>.
-libcoap home page: <http://libcoap.sourceforge.net/>.
+libcoap home page: <https://libcoap.net/>.
 _ACEOF
 ac_status=$?
 fi
@@ -2349,7 +2363,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-am__api_version='1.14'
+am__api_version='1.15'
 
 ac_aux_dir=
 for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
@@ -2570,7 +2584,7 @@ else
 $as_echo "$as_me: WARNING: 'missing' script is too old or missing" >&2;}
 fi
 
-if test x"${install_sh}" != xset; then
+if test x"${install_sh+set}" != xset; then
   case $am_aux_dir in
   *\ * | *\	*)
     install_sh="\${SHELL} '$am_aux_dir/install-sh'" ;;
@@ -2889,8 +2903,8 @@ MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
 # <http://lists.gnu.org/archive/html/automake/2012-07/msg00014.html>
 mkdir_p='$(MKDIR_P)'
 
-# We need awk for the "check" target.  The system "awk" is bad on
-# some platforms.
+# We need awk for the "check" target (and possibly the TAP driver).  The
+# system "awk" is bad on some platforms.
 # Always define AMTAR for backward compatibility.  Yes, it's still used
 # in the wild :-(  We should find a proper way to deprecate it ...
 AMTAR='$${TAR-tar}'
@@ -3996,6 +4010,8 @@ fi
 
 
 
+
+
 if test -n "$ac_tool_prefix"; then
   for ac_prog in ar lib "link -lib"
   do
@@ -4166,7 +4182,6 @@ unknown)
   as_fn_error $? "could not determine $AR interface" "$LINENO" 5
   ;;
 esac
-
 
 
 # enable the automatically build of shared and static libraries, the unit
@@ -12141,6 +12156,14 @@ $as_echo "$as_me: WARNING: ==> Graphviz dot $dot_version too old. Graphviz 2.26+
 		fi
 	fi
 fi
+ if test "x$build_documentation" = "xyes"; then
+  BUILD_DOCUMENTATION_TRUE=
+  BUILD_DOCUMENTATION_FALSE='#'
+else
+  BUILD_DOCUMENTATION_TRUE='#'
+  BUILD_DOCUMENTATION_FALSE=
+fi
+
 
  if test -n "$DOXYGEN"; then
   HAVE_DOXYGEN_TRUE=
@@ -12277,7 +12300,7 @@ else
 fi
 
 
-if test "x$build_examples" = "xyes"; then
+if test "x$build_examples" = "xyes" -a "x$build_documentation" = "xyes"; then
 
 	# Extract the first word of "a2x", so it can be a program name with args.
 set dummy a2x; ac_word=$2
@@ -12324,9 +12347,9 @@ fi
 $as_echo "$as_me: WARNING: ==> You want to build the examples binaries, that is also including the respective manpages but a2x was not found!" >&2;}
 		as_fn_error $? "==> Install the package that contains the a2x binary or disable the build of the examples using --disable-examples." "$LINENO" 5
 	fi
-	BUILD_EXAMPLES="YES"
+	build_examples="yes"
 fi
- if test "x$build_examples" != "x"; then
+ if test "x$build_examples" = "xyes"; then
   BUILD_EXAMPLES_TRUE=
   BUILD_EXAMPLES_FALSE='#'
 else
@@ -12890,6 +12913,10 @@ if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
+if test -z "${BUILD_DOCUMENTATION_TRUE}" && test -z "${BUILD_DOCUMENTATION_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_DOCUMENTATION\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${HAVE_DOXYGEN_TRUE}" && test -z "${HAVE_DOXYGEN_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_DOXYGEN\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
@@ -13360,7 +13387,7 @@ Configuration commands:
 $config_commands
 
 Report bugs to <libcoap-developers@lists.sourceforge.net>.
-libcoap home page: <http://libcoap.sourceforge.net/>."
+libcoap home page: <https://libcoap.net/>."
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
@@ -15182,6 +15209,14 @@ fi
 if test "x$build_examples" = "xyes"; then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build examples          : \"yes\"" >&5
 $as_echo "      build examples          : \"yes\"" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  a2x around  : \"yes\" ($A2X)" >&5
-$as_echo "             -->  a2x around  : \"yes\" ($A2X)" >&6; }
+	if test "x$A2X" != "x"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  use a2x     : \"yes\" ($A2X)" >&5
+$as_echo "             -->  use a2x     : \"yes\" ($A2X)" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  use a2x     : \"no\"" >&5
+$as_echo "             -->  use a2x     : \"no\"" >&6; }
+	fi
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build examples          : \"no\"" >&5
+$as_echo "      build examples          : \"no\"" >&6; }
 fi
