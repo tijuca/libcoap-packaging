@@ -24,12 +24,12 @@ Package: libcoap-1-0-bin
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends},
   libcoap-1-0 (= ${binary:Version})
-Description: C-Implementation of CoAP - example binarys
+Description: C-Implementation of CoAP - example binaries
  The libcoap provide some example binary files to show the usage of  a CoAP
- Server, CoAP Client and a Resource Directory implemenation. These examples
+ Server, CoAP Client and a Resource Directory implementation. These examples
  heavily rely on the libcoap as the core functionality is based there.
  .
- This package provides the following example binarys:
+ This package provides the following example binaries:
   * coap-client
     A command-line client that allows you to interact with CoAP reasources.
  .
