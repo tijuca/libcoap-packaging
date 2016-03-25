@@ -55,4 +55,6 @@ Description: C-Implementation of CoAP - development files
  "CoRE", <http://6lowapp.net> and was standardized in RFC 7252.
  .
  This package contains the developer files like headers, the static library
- and the pkg-config file.
+ and the pkg-config file. Also the Doxygen based library HTML documentation
+ is shipped by this package and can be accessed in 
+ /usr/share/doc/libcoap-1-0-dev/html.

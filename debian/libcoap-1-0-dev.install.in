@@ -1,4 +1,5 @@
+usr/include/coap
 usr/lib/@DEB_HOST_MULTIARCH@/libcoap-1.so
 usr/lib/@DEB_HOST_MULTIARCH@/libcoap-1.a
 usr/lib/@DEB_HOST_MULTIARCH@/pkgconfig
-usr/include/coap/
+usr/share/doc/libcoap/html usr/share/doc/libcoap-1-0-dev
