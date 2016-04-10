@@ -1,3 +1,17 @@
+libcoap (4.1.2~rc+git20160129-1) experimental; urgency=medium
+
+  * [505420f] debian/gbp.conf: enable now pristine-tar branch
+  * [e075b21] Imported Upstream version 4.1.2~rc+git20160129
+  * [f9d2e0a] create a patch queue from patchqueue branch
+  * [3631a53] fill date into prepared manpage *.txt files for a2x
+  * [81400ee] d/copyright: remove not used file entry for t_list.h
+  * [058524d] d/watch: adding a watch which looks at GitHub
+  * [6da7671] adding the html based library documentaion to *-dev package
+  * [3dc0496] d/tests: adding first bunch of autopkg tests
+  * [d31f26d] debian/control: fix small typo on libcoap-1-0-bin long desc
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Sun, 10 Apr 2016 10:46:50 +0200
+
 libcoap (4.1.2~rc+git20150706-1) experimental; urgency=medium
 
   [ Carsten Schoenert ]
