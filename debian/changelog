@@ -6,7 +6,7 @@ libcoap (4.1.2~rc+git20160129-1) experimental; urgency=medium
   * [3631a53] fill date into prepared manpage *.txt files for a2x
   * [81400ee] d/copyright: remove not used file entry for t_list.h
   * [058524d] d/watch: adding a watch which looks at GitHub
-  * [6da7671] adding the html based library documentaion to *-dev package
+  * [6da7671] adding the html based library documentation to *-dev package
   * [3dc0496] d/tests: adding first bunch of autopkg tests
   * [d31f26d] debian/control: fix small typo on libcoap-1-0-bin long desc
 
