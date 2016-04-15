@@ -8,7 +8,7 @@ Build-Depends: asciidoc,
   doxygen,
   graphviz,
   xmlto
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: http://sourceforge.net/projects/libcoap/
 
 Package: libcoap-1-0
