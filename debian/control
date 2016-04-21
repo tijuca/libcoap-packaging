@@ -60,7 +60,7 @@ Description: C-Implementation of CoAP - development files
 Package: libcoap-1-0-doc
 Section: doc
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, libjs-jquery
 Recommends: libcoap-1-0, www-browser
 Description: C-Implementation of CoAP - HTML based documentation files
  Lightweight application-protocol for devices that are constrained their
