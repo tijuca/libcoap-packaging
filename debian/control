@@ -61,7 +61,7 @@ Package: libcoap-1-0-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, libjs-jquery
-Recommends: libcoap-1-0, www-browser
+Recommends: libcoap-1-0-dev (= ${binary:Version}), www-browser
 Description: C-Implementation of CoAP - HTML based documentation files
  Lightweight application-protocol for devices that are constrained their
  resources such as computing power, RF range, memory, bandwidth, or network
