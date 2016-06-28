@@ -110,12 +110,12 @@ WARNING_CFLAGS="\
 -Wswitch-default \
 -Wswitch-enum \
 -Wunused \
--Wunused-result \
 "
 
 # check whether or not the compiler supports -Wlogical-op (clang does not...)
 AX_CHECK_COMPILE_FLAG([-Wlogical-op], [WARNING_CFLAGS="$WARNING_CFLAGS -Wlogical-op"],,[-Werror])
 AX_CHECK_COMPILE_FLAG([-fdiagnostics-color], [CFLAGS="$CFLAGS -fdiagnostics-color"],,[-Werror])
+AX_CHECK_COMPILE_FLAG([-Wunused-result], [WARNING_CFLAGS="$WARNING_CFLAGS -Wunused-result"])
 
 AC_SUBST([WARNING_CFLAGS])
 
@@ -233,7 +233,7 @@ AM_CONDITIONAL(HAVE_CUNIT, [test "x$CUNIT_LIBS" != "x"])
 # __examples__
 AC_ARG_ENABLE([examples],
               [AC_HELP_STRING([--enable-examples],
-              [Enable building the tests (default=yes)])],
+              [Enable building the example binaries (default=yes)])],
               [build_examples="$enableval"],
               [build_examples="yes"])
 
@@ -276,9 +276,8 @@ AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 
 # Checks for library functions.
-AC_FUNC_MALLOC
 AC_CHECK_FUNCS([memset select socket strcasecmp strrchr getaddrinfo \
-                strnlen])
+                strnlen malloc])
 
 # Check if -lsocket -lnsl is required (specifically Solaris)
 AC_SEARCH_LIBS([socket], [socket])
