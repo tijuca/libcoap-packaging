@@ -1,3 +1,19 @@
+libcoap (4.1.2~rc+git20160626-1) unstable; urgency=medium
+
+  * [75895a4] Imported Upstream version 4.1.2~rc+git20160626
+  * [82db37a] debian/control: increase Standards-version to 3.9.8
+  * [8aaac45] debian/rules: enabling hardening wrapper
+  * [b0739f6] remove HTML documentation installation into -dev pkg
+  * [83b2728] add new libcoap-1-0-doc package
+  * [07221dd] lintian: fixup embedded-javascript-library in libcoap-1-0-doc
+  * [354addc] rebuild patch queue from patchqueue branch
+  * [eb073a3] libcoap-1-0-doc: adjust the Recommends on the -dev package
+  * [60dad2a] adding a symbols files for libcoap-1-0
+  * [dcbfe8e] debian/copyright: update copyright information
+  * [c5575bb] debian/control: adjusting maintainers and Vcs resources
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Wed, 29 Jun 2016 22:52:25 +0200
+
 libcoap (4.1.2~rc+git20160129-1) experimental; urgency=medium
 
   * [505420f] debian/gbp.conf: enable now pristine-tar branch
