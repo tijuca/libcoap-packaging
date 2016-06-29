@@ -1,7 +1,8 @@
 Source: libcoap
 Section: libs
 Priority: optional
-Maintainer: Carsten Schoenert <c.schoenert@t-online.de>
+Maintainer: Debian IoT Maintainers <debian-iot-maintainers@lists.alioth.debian.org>
+Uploaders: Carsten Schoenert <c.schoenert@t-online.de>
 Build-Depends: asciidoc,
   debhelper (>= 9.0.0),
   exuberant-ctags,
@@ -10,6 +11,8 @@ Build-Depends: asciidoc,
   xmlto
 Standards-Version: 3.9.8
 Homepage: http://sourceforge.net/projects/libcoap/
+Vcs-Browser: https://anonscm.debian.org/cgit/debian-iot/libcoap.git
+Vcs-Git: https://anonscm.debian.org/git/debian-iot/libcoap.git
 
 Package: libcoap-1-0
 Architecture: any
