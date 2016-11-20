@@ -16,6 +16,7 @@ Vcs-Git: https://anonscm.debian.org/git/debian-iot/libcoap.git
 
 Package: libcoap-1-0
 Architecture: any
+Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: C-Implementation of CoAP
  Lightweight application-protocol for devices that are constrained their
@@ -49,6 +50,7 @@ Description: C-Implementation of CoAP - example binaries
 Package: libcoap-1-0-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends},
   libcoap-1-0 (= ${binary:Version})
 Description: C-Implementation of CoAP - development files
@@ -63,6 +65,7 @@ Description: C-Implementation of CoAP - development files
 Package: libcoap-1-0-doc
 Section: doc
 Architecture: all
+Multi-Arch: foreign
 Depends: ${misc:Depends}, libjs-jquery
 Recommends: libcoap-1-0-dev (= ${binary:Version}), www-browser
 Description: C-Implementation of CoAP - HTML based documentation files
