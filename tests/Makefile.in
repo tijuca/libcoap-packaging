@@ -16,7 +16,7 @@
 
 # doc/Makefile.am
 #
-# Copyright (C)      2015 Carsten Schoenert <c.schoenert@t-online.de>
+# Copyright (C) 2015-2016 Carsten Schoenert <c.schoenert@t-online.de>
 #
 # This file is part of the CoAP C library libcoap. Please see README and
 # COPYING for terms of use.
@@ -114,23 +114,19 @@ PROGRAMS = $(noinst_PROGRAMS)
 am__testdriver_SOURCES_DIST = testdriver.c test_error_response.c \
 	test_options.c test_pdu.c test_sendqueue.c test_uri.c \
 	test_wellknown.c
-@HAVE_CUNIT_TRUE@am_testdriver_OBJECTS =  \
-@HAVE_CUNIT_TRUE@	testdriver-testdriver.$(OBJEXT) \
-@HAVE_CUNIT_TRUE@	testdriver-test_error_response.$(OBJEXT) \
-@HAVE_CUNIT_TRUE@	testdriver-test_options.$(OBJEXT) \
-@HAVE_CUNIT_TRUE@	testdriver-test_pdu.$(OBJEXT) \
-@HAVE_CUNIT_TRUE@	testdriver-test_sendqueue.$(OBJEXT) \
-@HAVE_CUNIT_TRUE@	testdriver-test_uri.$(OBJEXT) \
-@HAVE_CUNIT_TRUE@	testdriver-test_wellknown.$(OBJEXT)
+@HAVE_CUNIT_TRUE@am_testdriver_OBJECTS = testdriver.$(OBJEXT) \
+@HAVE_CUNIT_TRUE@	test_error_response.$(OBJEXT) \
+@HAVE_CUNIT_TRUE@	test_options.$(OBJEXT) test_pdu.$(OBJEXT) \
+@HAVE_CUNIT_TRUE@	test_sendqueue.$(OBJEXT) test_uri.$(OBJEXT) \
+@HAVE_CUNIT_TRUE@	test_wellknown.$(OBJEXT)
 testdriver_OBJECTS = $(am_testdriver_OBJECTS)
-@HAVE_CUNIT_TRUE@testdriver_DEPENDENCIES = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+am__DEPENDENCIES_1 =
+@HAVE_CUNIT_TRUE@testdriver_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+@HAVE_CUNIT_TRUE@	$(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-testdriver_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(testdriver_CFLAGS) \
-	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -208,6 +204,7 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CTAGS_PROG = @CTAGS_PROG@
+CUNIT_CFLAGS = @CUNIT_CFLAGS@
 CUNIT_LIBS = @CUNIT_LIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -262,6 +259,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PREDEFINED_CFLAGS = @PREDEFINED_CFLAGS@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -329,7 +329,7 @@ top_srcdir = @top_srcdir@
 # just do anything if 'HAVE_CUNIT' is defined
 
 # picking up the default warning CFLAGS
-@HAVE_CUNIT_TRUE@AM_CFLAGS = $(WARNING_CFLAGS) -std=c99
+@HAVE_CUNIT_TRUE@AM_CFLAGS = -I$(top_srcdir)/include/coap -I$(top_builddir)/include/coap $(WARNING_CFLAGS) $(CUNIT_CFLAGS) -std=c99
 @HAVE_CUNIT_TRUE@testdriver_SOURCES = \
 @HAVE_CUNIT_TRUE@ testdriver.c \
 @HAVE_CUNIT_TRUE@ test_error_response.c \
@@ -339,13 +339,11 @@ top_srcdir = @top_srcdir@
 @HAVE_CUNIT_TRUE@ test_uri.c \
 @HAVE_CUNIT_TRUE@ test_wellknown.c
 
-@HAVE_CUNIT_TRUE@testdriver_LDADD = @CUNIT_LIBS@ @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@HAVE_CUNIT_TRUE@testdriver_LDADD = $(CUNIT_LIBS) $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 
 # If there is a API change to something $(LIBCOAP_API_VERSION) > 1 there is
 # nothing to adopt here. No needed to implement something here because the test
 # unit will always be build againts the actual header files!
-#
-@HAVE_CUNIT_TRUE@testdriver_CFLAGS = -I @top_builddir@/include/coap/ $(AM_CFLAGS)
 @HAVE_CUNIT_TRUE@CLEANFILES = testdriver
 all: all-am
 
@@ -392,7 +390,7 @@ clean-noinstPROGRAMS:
 
 testdriver$(EXEEXT): $(testdriver_OBJECTS) $(testdriver_DEPENDENCIES) $(EXTRA_testdriver_DEPENDENCIES) 
 	@rm -f testdriver$(EXEEXT)
-	$(AM_V_CCLD)$(testdriver_LINK) $(testdriver_OBJECTS) $(testdriver_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK) $(testdriver_OBJECTS) $(testdriver_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -400,13 +398,13 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-test_error_response.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-test_options.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-test_pdu.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-test_sendqueue.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-test_uri.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-test_wellknown.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver-testdriver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_error_response.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_options.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_pdu.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_sendqueue.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_uri.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_wellknown.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testdriver.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -428,104 +426,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
-
-testdriver-testdriver.o: testdriver.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-testdriver.o -MD -MP -MF $(DEPDIR)/testdriver-testdriver.Tpo -c -o testdriver-testdriver.o `test -f 'testdriver.c' || echo '$(srcdir)/'`testdriver.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-testdriver.Tpo $(DEPDIR)/testdriver-testdriver.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='testdriver.c' object='testdriver-testdriver.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-testdriver.o `test -f 'testdriver.c' || echo '$(srcdir)/'`testdriver.c
-
-testdriver-testdriver.obj: testdriver.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-testdriver.obj -MD -MP -MF $(DEPDIR)/testdriver-testdriver.Tpo -c -o testdriver-testdriver.obj `if test -f 'testdriver.c'; then $(CYGPATH_W) 'testdriver.c'; else $(CYGPATH_W) '$(srcdir)/testdriver.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-testdriver.Tpo $(DEPDIR)/testdriver-testdriver.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='testdriver.c' object='testdriver-testdriver.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-testdriver.obj `if test -f 'testdriver.c'; then $(CYGPATH_W) 'testdriver.c'; else $(CYGPATH_W) '$(srcdir)/testdriver.c'; fi`
-
-testdriver-test_error_response.o: test_error_response.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_error_response.o -MD -MP -MF $(DEPDIR)/testdriver-test_error_response.Tpo -c -o testdriver-test_error_response.o `test -f 'test_error_response.c' || echo '$(srcdir)/'`test_error_response.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_error_response.Tpo $(DEPDIR)/testdriver-test_error_response.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_error_response.c' object='testdriver-test_error_response.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_error_response.o `test -f 'test_error_response.c' || echo '$(srcdir)/'`test_error_response.c
-
-testdriver-test_error_response.obj: test_error_response.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_error_response.obj -MD -MP -MF $(DEPDIR)/testdriver-test_error_response.Tpo -c -o testdriver-test_error_response.obj `if test -f 'test_error_response.c'; then $(CYGPATH_W) 'test_error_response.c'; else $(CYGPATH_W) '$(srcdir)/test_error_response.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_error_response.Tpo $(DEPDIR)/testdriver-test_error_response.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_error_response.c' object='testdriver-test_error_response.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_error_response.obj `if test -f 'test_error_response.c'; then $(CYGPATH_W) 'test_error_response.c'; else $(CYGPATH_W) '$(srcdir)/test_error_response.c'; fi`
-
-testdriver-test_options.o: test_options.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_options.o -MD -MP -MF $(DEPDIR)/testdriver-test_options.Tpo -c -o testdriver-test_options.o `test -f 'test_options.c' || echo '$(srcdir)/'`test_options.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_options.Tpo $(DEPDIR)/testdriver-test_options.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_options.c' object='testdriver-test_options.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_options.o `test -f 'test_options.c' || echo '$(srcdir)/'`test_options.c
-
-testdriver-test_options.obj: test_options.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_options.obj -MD -MP -MF $(DEPDIR)/testdriver-test_options.Tpo -c -o testdriver-test_options.obj `if test -f 'test_options.c'; then $(CYGPATH_W) 'test_options.c'; else $(CYGPATH_W) '$(srcdir)/test_options.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_options.Tpo $(DEPDIR)/testdriver-test_options.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_options.c' object='testdriver-test_options.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_options.obj `if test -f 'test_options.c'; then $(CYGPATH_W) 'test_options.c'; else $(CYGPATH_W) '$(srcdir)/test_options.c'; fi`
-
-testdriver-test_pdu.o: test_pdu.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_pdu.o -MD -MP -MF $(DEPDIR)/testdriver-test_pdu.Tpo -c -o testdriver-test_pdu.o `test -f 'test_pdu.c' || echo '$(srcdir)/'`test_pdu.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_pdu.Tpo $(DEPDIR)/testdriver-test_pdu.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_pdu.c' object='testdriver-test_pdu.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_pdu.o `test -f 'test_pdu.c' || echo '$(srcdir)/'`test_pdu.c
-
-testdriver-test_pdu.obj: test_pdu.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_pdu.obj -MD -MP -MF $(DEPDIR)/testdriver-test_pdu.Tpo -c -o testdriver-test_pdu.obj `if test -f 'test_pdu.c'; then $(CYGPATH_W) 'test_pdu.c'; else $(CYGPATH_W) '$(srcdir)/test_pdu.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_pdu.Tpo $(DEPDIR)/testdriver-test_pdu.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_pdu.c' object='testdriver-test_pdu.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_pdu.obj `if test -f 'test_pdu.c'; then $(CYGPATH_W) 'test_pdu.c'; else $(CYGPATH_W) '$(srcdir)/test_pdu.c'; fi`
-
-testdriver-test_sendqueue.o: test_sendqueue.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_sendqueue.o -MD -MP -MF $(DEPDIR)/testdriver-test_sendqueue.Tpo -c -o testdriver-test_sendqueue.o `test -f 'test_sendqueue.c' || echo '$(srcdir)/'`test_sendqueue.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_sendqueue.Tpo $(DEPDIR)/testdriver-test_sendqueue.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_sendqueue.c' object='testdriver-test_sendqueue.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_sendqueue.o `test -f 'test_sendqueue.c' || echo '$(srcdir)/'`test_sendqueue.c
-
-testdriver-test_sendqueue.obj: test_sendqueue.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_sendqueue.obj -MD -MP -MF $(DEPDIR)/testdriver-test_sendqueue.Tpo -c -o testdriver-test_sendqueue.obj `if test -f 'test_sendqueue.c'; then $(CYGPATH_W) 'test_sendqueue.c'; else $(CYGPATH_W) '$(srcdir)/test_sendqueue.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_sendqueue.Tpo $(DEPDIR)/testdriver-test_sendqueue.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_sendqueue.c' object='testdriver-test_sendqueue.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_sendqueue.obj `if test -f 'test_sendqueue.c'; then $(CYGPATH_W) 'test_sendqueue.c'; else $(CYGPATH_W) '$(srcdir)/test_sendqueue.c'; fi`
-
-testdriver-test_uri.o: test_uri.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_uri.o -MD -MP -MF $(DEPDIR)/testdriver-test_uri.Tpo -c -o testdriver-test_uri.o `test -f 'test_uri.c' || echo '$(srcdir)/'`test_uri.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_uri.Tpo $(DEPDIR)/testdriver-test_uri.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_uri.c' object='testdriver-test_uri.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_uri.o `test -f 'test_uri.c' || echo '$(srcdir)/'`test_uri.c
-
-testdriver-test_uri.obj: test_uri.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_uri.obj -MD -MP -MF $(DEPDIR)/testdriver-test_uri.Tpo -c -o testdriver-test_uri.obj `if test -f 'test_uri.c'; then $(CYGPATH_W) 'test_uri.c'; else $(CYGPATH_W) '$(srcdir)/test_uri.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_uri.Tpo $(DEPDIR)/testdriver-test_uri.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_uri.c' object='testdriver-test_uri.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_uri.obj `if test -f 'test_uri.c'; then $(CYGPATH_W) 'test_uri.c'; else $(CYGPATH_W) '$(srcdir)/test_uri.c'; fi`
-
-testdriver-test_wellknown.o: test_wellknown.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_wellknown.o -MD -MP -MF $(DEPDIR)/testdriver-test_wellknown.Tpo -c -o testdriver-test_wellknown.o `test -f 'test_wellknown.c' || echo '$(srcdir)/'`test_wellknown.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_wellknown.Tpo $(DEPDIR)/testdriver-test_wellknown.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_wellknown.c' object='testdriver-test_wellknown.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_wellknown.o `test -f 'test_wellknown.c' || echo '$(srcdir)/'`test_wellknown.c
-
-testdriver-test_wellknown.obj: test_wellknown.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -MT testdriver-test_wellknown.obj -MD -MP -MF $(DEPDIR)/testdriver-test_wellknown.Tpo -c -o testdriver-test_wellknown.obj `if test -f 'test_wellknown.c'; then $(CYGPATH_W) 'test_wellknown.c'; else $(CYGPATH_W) '$(srcdir)/test_wellknown.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/testdriver-test_wellknown.Tpo $(DEPDIR)/testdriver-test_wellknown.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='test_wellknown.c' object='testdriver-test_wellknown.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(testdriver_CFLAGS) $(CFLAGS) -c -o testdriver-test_wellknown.obj `if test -f 'test_wellknown.c'; then $(CYGPATH_W) 'test_wellknown.c'; else $(CYGPATH_W) '$(srcdir)/test_wellknown.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

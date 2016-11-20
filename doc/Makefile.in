@@ -147,6 +147,7 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CTAGS_PROG = @CTAGS_PROG@
+CUNIT_CFLAGS = @CUNIT_CFLAGS@
 CUNIT_LIBS = @CUNIT_LIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -201,6 +202,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PREDEFINED_CFLAGS = @PREDEFINED_CFLAGS@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -469,14 +473,14 @@ ps-am:
 # that the 'all' target is running before, in short: the user has to run first
 # 'make' before running 'make install'!
 @HAVE_DOXYGEN_TRUE@install-data-am:
-@HAVE_DOXYGEN_TRUE@	@if [ ! -d $(srcdir)/html ]; then \
+@HAVE_DOXYGEN_TRUE@	@if [ ! -d $(top_builddir)/doc/html ]; then \
 @HAVE_DOXYGEN_TRUE@		echo ;\
-@HAVE_DOXYGEN_TRUE@		echo "     No install data in '$(srcdir)/html'found! Please run 'make all' first." ;\
+@HAVE_DOXYGEN_TRUE@		echo "     No install data in '$(top_builddir)/doc/html'found! Please run 'make all' first." ;\
 @HAVE_DOXYGEN_TRUE@		echo ;\
 @HAVE_DOXYGEN_TRUE@		exit 1 ;\
 @HAVE_DOXYGEN_TRUE@	fi
 @HAVE_DOXYGEN_TRUE@	$(MKDIR_P) $(DESTDIR)$(htmldir)/html || exit 1
-@HAVE_DOXYGEN_TRUE@	cp -a $(srcdir)/html $(DESTDIR)$(htmldir)
+@HAVE_DOXYGEN_TRUE@	cp -a $(top_builddir)/doc/html $(DESTDIR)$(htmldir)
 @HAVE_DOXYGEN_TRUE@	find $(DESTDIR)$(htmldir) -type f -name "*.md5" -exec rm {} \;
 
 @HAVE_DOXYGEN_TRUE@uninstall-am:
@@ -486,7 +490,7 @@ ps-am:
 @HAVE_DOXYGEN_TRUE@	$(DOXYGEN) Doxyfile
 
 @HAVE_DOXYGEN_TRUE@clean-local:
-@HAVE_DOXYGEN_TRUE@	rm -rf $(srcdir)/html
+@HAVE_DOXYGEN_TRUE@	rm -rf $(top_builddir)/doc/html
 
 @HAVE_DOXYGEN_TRUE@distclean-local: clean-local
 

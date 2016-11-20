@@ -17,7 +17,7 @@
 # Makefile.am for libcoap
 #
 # Copyright (C) 2010-2015 Olaf Bergmann <bergmann@tzi.org>
-#           (C)      2015 Carsten Schoenert <c.schoenert@t-online.de>
+#           (C) 2015-2016 Carsten Schoenert <c.schoenert@t-online.de>
 #
 # This file is part of the CoAP C library libcoap. Please see README and
 # COPYING for terms of use.
@@ -319,6 +319,7 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CTAGS_PROG = @CTAGS_PROG@
+CUNIT_CFLAGS = @CUNIT_CFLAGS@
 CUNIT_LIBS = @CUNIT_LIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -373,6 +374,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PREDEFINED_CFLAGS = @PREDEFINED_CFLAGS@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -452,7 +456,7 @@ EXTRA_DIST = \
   tests/test_uri.h \
   tests/test_wellknown.h
 
-AM_CFLAGS = -I @top_builddir@/include/coap/ $(WARNING_CFLAGS) -std=c99
+AM_CFLAGS = -I$(top_builddir)/include/coap -I$(top_srcdir)/include/coap $(WARNING_CFLAGS) -std=c99
 SUBDIRS = . $(DOC_DIR) tests examples
 lib_LTLIBRARIES = libcoap-@LIBCOAP_API_VERSION@.la
 libcoap_@LIBCOAP_API_VERSION@_la_CFLAGS = \
@@ -480,35 +484,35 @@ libcoap_@LIBCOAP_API_VERSION@_la_SOURCES = \
 
 libcoap_includedir = $(includedir)/coap/
 libcoap_include_HEADERS = \
-   include/coap/address.h \
-   include/coap/async.h \
-   include/coap/bits.h \
-   include/coap/block.h \
-   include/coap/coap.h \
-   include/coap/coap_io.h \
-   include/coap/coap_time.h \
-   include/coap/debug.h \
-   include/coap/encode.h \
-   include/coap/hashkey.h \
-   include/coap/libcoap.h \
-   include/coap/mem.h \
-   include/coap/net.h \
-   include/coap/option.h \
-   include/coap/pdu.h \
-   include/coap/prng.h \
-   include/coap/resource.h \
-   include/coap/str.h \
-   include/coap/subscribe.h \
-   include/coap/uri.h \
-   include/coap/uthash.h \
-   include/coap/utlist.h
+  $(top_srcdir)/include/coap/address.h \
+  $(top_srcdir)/include/coap/async.h \
+  $(top_srcdir)/include/coap/bits.h \
+  $(top_srcdir)/include/coap/block.h \
+  $(top_builddir)/include/coap/coap.h \
+  $(top_srcdir)/include/coap/coap_io.h \
+  $(top_srcdir)/include/coap/coap_time.h \
+  $(top_srcdir)/include/coap/debug.h \
+  $(top_srcdir)/include/coap/encode.h \
+  $(top_srcdir)/include/coap/hashkey.h \
+  $(top_srcdir)/include/coap/libcoap.h \
+  $(top_srcdir)/include/coap/mem.h \
+  $(top_srcdir)/include/coap/net.h \
+  $(top_srcdir)/include/coap/option.h \
+  $(top_srcdir)/include/coap/pdu.h \
+  $(top_srcdir)/include/coap/prng.h \
+  $(top_srcdir)/include/coap/resource.h \
+  $(top_srcdir)/include/coap/str.h \
+  $(top_srcdir)/include/coap/subscribe.h \
+  $(top_srcdir)/include/coap/uri.h \
+  $(top_srcdir)/include/coap/uthash.h \
+  $(top_srcdir)/include/coap/utlist.h
 
 
 # If there is a API change to something $(LIBCOAP_API_VERSION) > 1 the install
 # prefix for the header files has to change to not conflict the older version
 # if the user want's to install both versions. There will be something used like
 # libcoap_include_HEADERS = \
-#   include/coap-$(LIBCOAP_API_VERSION)/*
+#  $(top_srcdir)/include/coap-$(LIBCOAP_API_VERSION)/*
 libcoap_@LIBCOAP_API_VERSION@_la_LDFLAGS = \
   -version-info $(LT_LIBCOAP_CURRENT):$(LT_LIBCOAP_REVISION):$(LT_LIBCOAP_AGE)	\
   @libcoap_SYMBOLS@ \
@@ -1207,7 +1211,7 @@ distclean: distclean-recursive
 	-rm -rf src/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-hdr distclean-libtool distclean-tags
+	distclean-hdr distclean-libtool distclean-local distclean-tags
 
 dvi: dvi-recursive
 
@@ -1280,24 +1284,23 @@ uninstall-am: uninstall-libLTLIBRARIES \
 	ctags-am dist dist-all dist-bzip2 dist-gzip dist-lzip \
 	dist-shar dist-tarZ dist-xz dist-zip distcheck distclean \
 	distclean-compile distclean-generic distclean-hdr \
-	distclean-libtool distclean-tags distcleancheck distdir \
-	distuninstallcheck dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am \
-	install-libLTLIBRARIES install-libcoap_includeHEADERS \
-	install-man install-pdf install-pdf-am install-pkgconfigDATA \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES \
+	distclean-libtool distclean-local distclean-tags \
+	distcleancheck distdir distuninstallcheck dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-libLTLIBRARIES \
+	install-libcoap_includeHEADERS install-man install-pdf \
+	install-pdf-am install-pkgconfigDATA install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-libLTLIBRARIES \
 	uninstall-libcoap_includeHEADERS uninstall-pkgconfigDATA
 
 .PRECIOUS: Makefile
 
-
-.PHONY:	update-map-file check_ctags
 
 # This helper is called by libcoap-$(LIBCOAP_API_VERSION).{map,sym} to see if
 # configure has detected a usable version of the ctags program and aborts if not.
@@ -1315,16 +1318,31 @@ update-map-file: libcoap-$(LIBCOAP_API_VERSION).map libcoap-$(LIBCOAP_API_VERSIO
 libcoap-$(LIBCOAP_API_VERSION).map: check_ctags $(libcoap_include_HEADERS)
 	( echo "VER_$(LIBCOAP_API_VERSION) {" ; \
 	echo "global:" ; \
-	ctags $(CTAGS_IGNORE) -f - --c-kinds=p $(libcoap_include_HEADERS) | awk '/^coap_/ { print "  " $$1 ";" }' | sort ; \
+	$(CTAGS_PROG) $(CTAGS_IGNORE) -f - --c-kinds=p $(libcoap_include_HEADERS) | awk '/^coap_/ { print "  " $$1 ";" }' | sort ; \
 	echo "local:" ; \
 	echo "  *;" ; \
 	echo "};" ) > $@.new
 	mv $@.new $@
 
 libcoap-$(LIBCOAP_API_VERSION).sym: check_ctags $(libcoap_include_HEADERS)
-	( ctags $(CTAGS_IGNORE) -f - --c-kinds=p $(libcoap_include_HEADERS) | awk '/^coap_/ { print $$1 }' | sort ) \
+	( $(CTAGS_PROG) $(CTAGS_IGNORE) -f - --c-kinds=p $(libcoap_include_HEADERS) | awk '/^coap_/ { print $$1 }' | sort ) \
 	> $@.new
 	mv $@.new $@
+
+distclean-local:
+	rm -f libcoap-$(LIBCOAP_API_VERSION).map
+	rm -f libcoap-$(LIBCOAP_API_VERSION).sym
+	rm -f libcoap-$(LIBCOAP_API_VERSION).pc
+	@echo
+	@echo "     ---> Please note the following important advice! <---"
+	@echo "     The files libcoap-$(LIBCOAP_API_VERSION).{map,sym} are removed by the distclean target!"
+	@echo "     To regenerate this two files you need to call 'make update-map-file' first before any"
+	@echo "     other Make target. Otherwise the build of libcoap will fail!"
+	@echo
+
+dist-local: update-map-file
+
+.PHONY: update-map-file check_ctags
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
