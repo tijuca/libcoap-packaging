@@ -1,3 +1,11 @@
+libcoap (4.1.2~rc+git20161120-1) unstable; urgency=medium
+
+  * [7c39e8e] debian/control: Update of the project homepage
+  * [5af4d0a] Multi-Arch: Adding control suggested control fields
+  * [ce03614] New upstream version 4.1.2~rc+git20161120
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Sun, 20 Nov 2016 11:32:56 +0100
+
 libcoap (4.1.2~rc+git20160626-1) unstable; urgency=medium
 
   * [75895a4] Imported Upstream version 4.1.2~rc+git20160626
