@@ -198,6 +198,7 @@ test -x / || exit 1"
   as_lineno_2=";as_suggested=$as_suggested$LINENO;as_suggested=$as_suggested" as_lineno_2a=\$LINENO
   eval 'test \"x\$as_lineno_1'\$as_run'\" != \"x\$as_lineno_2'\$as_run'\" &&
   test \"x\`expr \$as_lineno_1'\$as_run' + 1\`\" = \"x\$as_lineno_2'\$as_run'\"' || exit 1
+test \$(( 1 + 1 )) = 2 || exit 1
 
   test -n \"\${ZSH_VERSION+set}\${BASH_VERSION+set}\" || (
     ECHO='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
@@ -205,8 +206,7 @@ test -x / || exit 1"
     ECHO=\$ECHO\$ECHO\$ECHO\$ECHO\$ECHO\$ECHO
     PATH=/empty FPATH=/empty; export PATH FPATH
     test \"X\`printf %s \$ECHO\`\" = \"X\$ECHO\" \\
-      || test \"X\`print -r -- \$ECHO\`\" = \"X\$ECHO\" ) || exit 1
-test \$(( 1 + 1 )) = 2 || exit 1"
+      || test \"X\`print -r -- \$ECHO\`\" = \"X\$ECHO\" ) || exit 1"
   if (eval "$as_required") 2>/dev/null; then :
   as_have_required=yes
 else
@@ -703,6 +703,7 @@ A2X
 HAVE_CUNIT_FALSE
 HAVE_CUNIT_TRUE
 CUNIT_LIBS
+CUNIT_CFLAGS
 HAVE_DOXYGEN_FALSE
 HAVE_DOXYGEN_TRUE
 BUILD_DOCUMENTATION_FALSE
@@ -738,7 +739,6 @@ LD
 FGREP
 EGREP
 GREP
-SED
 host_os
 host_vendor
 host_cpu
@@ -750,6 +750,7 @@ build
 LIBTOOL
 ac_ct_AR
 AR
+SED
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -767,6 +768,9 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
+PKG_CONFIG_LIBDIR
+PKG_CONFIG_PATH
+PKG_CONFIG
 AM_BACKSLASH
 AM_DEFAULT_VERBOSITY
 AM_DEFAULT_V
@@ -853,6 +857,9 @@ enable_examples
       ac_precious_vars='build_alias
 host_alias
 target_alias
+PKG_CONFIG
+PKG_CONFIG_PATH
+PKG_CONFIG_LIBDIR
 CC
 CFLAGS
 LDFLAGS
@@ -860,6 +867,8 @@ LIBS
 CPPFLAGS
 LT_SYS_LIBRARY_PATH
 CPP
+CUNIT_CFLAGS
+CUNIT_LIBS
 A2X
 CTAGS_PROG'
 
@@ -1502,9 +1511,9 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-documentation  Enable building the documentation (default=yes)
-  --enable-tests          Enable building the tests (default=no)
-  --enable-examples       Enable building the example binaries (default=yes)
+  --enable-documentation  Enable building the documentation [default=yes]
+  --enable-tests          Enable building the binary testsuite [default=no]
+  --enable-examples       Enable building the example binaries [default=yes]
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1519,6 +1528,11 @@ Optional Packages:
                           compiler's sysroot if not specified).
 
 Some influential environment variables:
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
   CC          C compiler command
   CFLAGS      C compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -1529,8 +1543,11 @@ Some influential environment variables:
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
   CPP         C preprocessor
+  CUNIT_CFLAGS
+              C compiler flags for CUNIT, overriding pkg-config
+  CUNIT_LIBS  linker flags for CUNIT, overriding pkg-config
   A2X         a2x command
-  CTAGS_PROG  the 'ctag' program to use for make target 'update-map-file'
+  CTAGS_PROG  the 'exctags' program to use for make target 'update-map-file'
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -2971,6 +2988,126 @@ END
 fi
 
 
+
+
+
+
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
+$as_echo "$ac_pt_PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.20
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		PKG_CONFIG=""
+	fi
+fi
+
 # Generate one configuration header file for building the library itself with
 # an autogenerated template. We need later a second one (include/libcoap.h)
 # that will be installed alongside the library.
@@ -4016,6 +4153,75 @@ else
 fi
 
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
+$as_echo_n "checking for a sed that does not truncate output... " >&6; }
+if ${ac_cv_path_SED+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
+     for ac_i in 1 2 3 4 5 6 7; do
+       ac_script="$ac_script$as_nl$ac_script"
+     done
+     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
+     { ac_script=; unset ac_script;}
+     if test -z "$SED"; then
+  ac_path_SED_found=false
+  # Loop through the user's path and test for each of PROGNAME-LIST
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_prog in sed gsed; do
+    for ac_exec_ext in '' $ac_executable_extensions; do
+      ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
+      as_fn_executable_p "$ac_path_SED" || continue
+# Check for GNU ac_path_SED and select it if it is found.
+  # Check for GNU $ac_path_SED
+case `"$ac_path_SED" --version 2>&1` in
+*GNU*)
+  ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
+*)
+  ac_count=0
+  $as_echo_n 0123456789 >"conftest.in"
+  while :
+  do
+    cat "conftest.in" "conftest.in" >"conftest.tmp"
+    mv "conftest.tmp" "conftest.in"
+    cp "conftest.in" "conftest.nl"
+    $as_echo '' >> "conftest.nl"
+    "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+    as_fn_arith $ac_count + 1 && ac_count=$as_val
+    if test $ac_count -gt ${ac_path_SED_max-0}; then
+      # Best one so far, save it but keep looking for a better one
+      ac_cv_path_SED="$ac_path_SED"
+      ac_path_SED_max=$ac_count
+    fi
+    # 10*(2^10) chars as input seems more than enough
+    test $ac_count -gt 10 && break
+  done
+  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+esac
+
+      $ac_path_SED_found && break 3
+    done
+  done
+  done
+IFS=$as_save_IFS
+  if test -z "$ac_cv_path_SED"; then
+    as_fn_error $? "no acceptable sed could be found in \$PATH" "$LINENO" 5
+  fi
+else
+  ac_cv_path_SED=$SED
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_SED" >&5
+$as_echo "$ac_cv_path_SED" >&6; }
+ SED="$ac_cv_path_SED"
+  rm -f conftest.sed
 
 
 
@@ -12518,8 +12724,8 @@ fi
 
 
 if test "x$build_documentation" = "xyes"; then
-	# Check for doxygen
-	for ac_prog in doxygen
+    # Check for doxygen
+    for ac_prog in doxygen
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -12564,44 +12770,44 @@ fi
   test -n "$DOXYGEN" && break
 done
 
-	if test -z "$DOXYGEN"; then
-		if test "x$build_documentation" = "xyes"; then
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Doxygen not found - continuing without Doxygen support" >&5
+    if test -z "$DOXYGEN"; then
+        if test "x$build_documentation" = "xyes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Doxygen not found - continuing without Doxygen support" >&5
 $as_echo "$as_me: WARNING: ==> Doxygen not found - continuing without Doxygen support" >&2;}
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> The libcoap html documentation will not be build!" >&5
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> The libcoap html documentation will not be build!" >&5
 $as_echo "$as_me: WARNING: ==> The libcoap html documentation will not be build!" >&2;}
-			doxygen_version="not found"
-		fi
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for compatible doxygen version" >&5
-$as_echo_n "checking for compatible doxygen version... " >&6; }
-						doxygen_version=`$DOXYGEN --version`
-						as_arg_v1=$doxygen_version
+            doxygen_version="not found"
+        fi
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compatible doxygen version (>= 1.7.0)" >&5
+$as_echo_n "checking for compatible doxygen version (>= 1.7.0)... " >&6; }
+                        doxygen_version=`$DOXYGEN --version`
+                        as_arg_v1=$doxygen_version
 as_arg_v2=1.7.0
 awk "$as_awk_strverscmp" v1="$as_arg_v1" v2="$as_arg_v2" /dev/null
 case $? in #(
   1) :
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-						 DOXYGEN="" ;; #(
+                         DOXYGEN="" ;; #(
   0) :
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; } ;; #(
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes $doxygen_version" >&5
+$as_echo "yes $doxygen_version" >&6; } ;; #(
   2) :
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; } ;; #(
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes $doxygen_version" >&5
+$as_echo "yes $doxygen_version" >&6; } ;; #(
   *) :
      ;;
 esac
-		if test "x$DOXYGEN" = "x" -a "x$build_documentation" = "xyes"; then
-			as_fn_error $? "==> Doxygen $doxygen_version too old. Doxygen 1.7+ required for documentation build." "$LINENO" 5
-			as_fn_error $? "==> Install required doxygen version or disable the documentation using --disable-documentation" "$LINENO" 5
-		else
-			# we found doxygen and the version is valid
-			DOC_DIR=doc
+        if test "x$DOXYGEN" = "x" -a "x$build_documentation" = "xyes"; then
+            as_fn_error $? "==> Doxygen $doxygen_version too old. Doxygen 1.7+ required for documentation build." "$LINENO" 5
+            as_fn_error $? "==> Install required doxygen version or disable the documentation using --disable-documentation" "$LINENO" 5
+        else
+            # we found doxygen and the version is valid
+            DOC_DIR=doc
 
-			# now checking dot (needed for graphics)
-			# Extract the first word of "dot", so it can be a program name with args.
+            # now checking dot (needed for graphics)
+            # Extract the first word of "dot", so it can be a program name with args.
 set dummy dot; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -12641,50 +12847,66 @@ $as_echo "no" >&6; }
 fi
 
 
-			if test "x$DOT" = "x"; then
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> dot not found - continuing without DOT support" >&5
+            if test "x$DOT" = "x"; then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> dot not found - continuing without DOT support" >&5
 $as_echo "$as_me: WARNING: ==> dot not found - continuing without DOT support" >&2;}
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> The libcoap html documentation will be build without DOT graphics!" >&5
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> The libcoap html documentation will be build without DOT graphics!" >&5
 $as_echo "$as_me: WARNING: ==> The libcoap html documentation will be build without DOT graphics!" >&2;}
-				HAVE_DOT="NO"
-				USE_CALL_GRAPH="NO"
-			else
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for compatible dot version" >&5
-$as_echo_n "checking for compatible dot version... " >&6; }
-				dot_version=`$DOT -V 2>&1|$GREP -oP '(?<=version\W)[0-9.]*(?=\W(.*))'`
-				as_arg_v1=$dot_version
+                HAVE_DOT="NO"
+                USE_CALL_GRAPH="NO"
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compatible dot version (>= 2.26.0)" >&5
+$as_echo_n "checking for compatible dot version (>= 2.26.0)... " >&6; }
+                case $host in
+                    *-freebsd1*)
+                    # csh and tcsh have a different output redirection than more recent shells
+                    # cmd >& file   # Redirect both stdout and stderr to file.
+                    # cmd >>& file  # Append both stdout and stderr to file.
+                    # cmd1 | cmd2   # pipe stdout to cmd2
+                    # cmd1 |& cmd2  # pipe stdout and stderr to cmd2
+                    # Using a explicit call with the default always available C-shell on FreeBSD,
+                    # the user may have installed another shell from a port which we don't know here
+                    dot_version=`export DOT=$DOT && csh -c '$DOT -V |& cut -f5 -d" "'`
+                    ;;
+
+                    *)
+                    dot_version=`$DOT -V 2>&1 | cut -f5 -d" "`
+                    ;;
+
+                esac
+                as_arg_v1=$dot_version
 as_arg_v2=2.26.0
 awk "$as_awk_strverscmp" v1="$as_arg_v1" v2="$as_arg_v2" /dev/null
 case $? in #(
   1) :
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-								    DOT="" ;; #(
+                                    DOT="" ;; #(
   0) :
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; } ;; #(
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes $dot_version" >&5
+$as_echo "yes $dot_version" >&6; } ;; #(
   2) :
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; } ;; #(
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes $dot_version" >&5
+$as_echo "yes $dot_version" >&6; } ;; #(
   *) :
      ;;
 esac
-				if test "x$DOT" = "x" -a "x$build_documentation" = "xyes"; then
-						{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Graphviz dot $dot_version too old. Graphviz 2.26+ required for documentation build." >&5
+                if test "x$DOT" = "x" -a "x$build_documentation" = "xyes"; then
+                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Graphviz dot $dot_version too old. Graphviz 2.26+ required for documentation build." >&5
 $as_echo "$as_me: WARNING: ==> Graphviz dot $dot_version too old. Graphviz 2.26+ required for documentation build." >&2;}
-						as_fn_error $? "==> Install required graphviz version or disable the documentation using --disable-documentation" "$LINENO" 5
-				fi
-				# we found dot and the version is valid
-				HAVE_DOT="YES"
-				# let doxygen create caller graphics
-				# see http://www.stack.nl/~dimitri/doxygen/manual/config.html#cfg_call_graph
-				USE_CALL_GRAPH="YES"
-				# exporting the tests to doc/Doxygen(.in)
+                        as_fn_error $? "==> Install required graphviz version or disable the documentation using --disable-documentation" "$LINENO" 5
+                fi
+                # we found dot and the version is valid
+                HAVE_DOT="YES"
+                # let doxygen create caller graphics
+                # see http://www.stack.nl/~dimitri/doxygen/manual/config.html#cfg_call_graph
+                USE_CALL_GRAPH="YES"
+                # exporting the tests to doc/Doxygen(.in)
 
 
-			fi
-		fi
-	fi
+            fi
+        fi
+    fi
 fi
  if test "x$build_documentation" = "xyes"; then
   BUILD_DOCUMENTATION_TRUE=
@@ -12718,98 +12940,88 @@ fi
 
 
 if test "x$build_tests" = "xyes"; then
-	# CUnit ships not version within the pkgconfig file cunit.pc so we have to do some more work here
-	# Check for CUnit header files
-	for ac_header in CUnit/CUnit.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "CUnit/CUnit.h" "ac_cv_header_CUnit_CUnit_h" "$ac_includes_default"
-if test "x$ac_cv_header_CUnit_CUnit_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_CUNIT_CUNIT_H 1
-_ACEOF
 
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUNIT" >&5
+$as_echo_n "checking for CUNIT... " >&6; }
+
+if test -n "$CUNIT_CFLAGS"; then
+    pkg_cv_CUNIT_CFLAGS="$CUNIT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cunit\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cunit") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUNIT_CFLAGS=`$PKG_CONFIG --cflags "cunit" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> You want to build the testing binary but the needed header files for CUnit could not be found!" >&5
-$as_echo "$as_me: WARNING: ==> You want to build the testing binary but the needed header files for CUnit could not be found!" >&2;}
-					  as_fn_error $? "==> Install the package that contains the headers or disable the testing binary using --disable-tests." "$LINENO" 5
-
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$CUNIT_LIBS"; then
+    pkg_cv_CUNIT_LIBS="$CUNIT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cunit\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cunit") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUNIT_LIBS=`$PKG_CONFIG --libs "cunit" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
 fi
 
-done
 
-	# Check now for libcunit
-	save_LIBS="$LIBS"
-	LIBS=""
-	CUNIT_LIBS=""
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUNIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "cunit" 2>&1`
+        else
+	        CUNIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "cunit" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUNIT_PKG_ERRORS" >&5
+
 	have_cunit=no
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing CU_add_suite" >&5
-$as_echo_n "checking for library containing CU_add_suite... " >&6; }
-if ${ac_cv_search_CU_add_suite+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> You want to build the testing binary but the pkg-config file cunit.pc could not be found or installed CUnit version is too old!" >&5
+$as_echo "$as_me: WARNING: ==> You want to build the testing binary but the pkg-config file cunit.pc could not be found or installed CUnit version is too old!" >&2;}
+                       as_fn_error $? "==> Install the package(s) containing the development files for CUnit or disable the testing binary using --disable-tests." "$LINENO" 5
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char CU_add_suite ();
-int
-main ()
-{
-return CU_add_suite ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' cunit; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_CU_add_suite=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_CU_add_suite+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_CU_add_suite+:} false; then :
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	have_cunit=no
+                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> You want to build the testing binary but the pkg-config file cunit.pc could not be found or installed CUnit version is too old!" >&5
+$as_echo "$as_me: WARNING: ==> You want to build the testing binary but the pkg-config file cunit.pc could not be found or installed CUnit version is too old!" >&2;}
+                       as_fn_error $? "==> Install the package(s) containing the development files for CUnit or disable the testing binary using --disable-tests." "$LINENO" 5
 
 else
-  ac_cv_search_CU_add_suite=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_CU_add_suite" >&5
-$as_echo "$ac_cv_search_CU_add_suite" >&6; }
-ac_res=$ac_cv_search_CU_add_suite
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  CUNIT_LIBS="$LIBS"
+	CUNIT_CFLAGS=$pkg_cv_CUNIT_CFLAGS
+	CUNIT_LIBS=$pkg_cv_CUNIT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	have_cunit=yes
 
 $as_echo "#define HAVE_LIBCUNIT 1" >>confdefs.h
 
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> You want to build the testing binary but the needed library 'libcunit' for linking could not be found!" >&5
-$as_echo "$as_me: WARNING: ==> You want to build the testing binary but the needed library 'libcunit' for linking could not be found!" >&2;}
-				    as_fn_error $? "==> Install the package that contains the library or disable the testing binary using --disable-tests." "$LINENO" 5
-
 fi
-
-	LIBS="$save_LIBS"
-
-	HAVE_CUNIT="YES"
 fi
  if test "x$CUNIT_LIBS" != "x"; then
   HAVE_CUNIT_TRUE=
@@ -12832,7 +13044,7 @@ fi
 
 if test "x$build_examples" = "xyes" -a "x$build_documentation" = "xyes"; then
 
-	# Extract the first word of "a2x", so it can be a program name with args.
+    # Extract the first word of "a2x", so it can be a program name with args.
 set dummy a2x; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -12872,12 +13084,12 @@ $as_echo "no" >&6; }
 fi
 
 
-	if test "x$A2X" = "x"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> You want to build the examples binaries, that is also including the respective manpages but a2x was not found!" >&5
+    if test "x$A2X" = "x"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> You want to build the examples binaries, that is also including the respective manpages but a2x was not found!" >&5
 $as_echo "$as_me: WARNING: ==> You want to build the examples binaries, that is also including the respective manpages but a2x was not found!" >&2;}
-		as_fn_error $? "==> Install the package that contains the a2x binary or disable the build of the examples using --disable-examples." "$LINENO" 5
-	fi
-	build_examples="yes"
+        as_fn_error $? "==> Install the package containg a2x (mostly asciidoc) or disable the build of the examples using --disable-examples." "$LINENO" 5
+    fi
+    build_examples="yes"
 fi
  if test "x$build_examples" = "xyes"; then
   BUILD_EXAMPLES_TRUE=
@@ -12891,9 +13103,63 @@ fi
 # end configure options
 #######################
 
-# Check for ctags
+##########################################
+# from configure options independed checks
 
-# Extract the first word of "ctags", so it can be a program name with args.
+# Check for (ex)ctags binary
+# The needed ctags binary name differs on FreeBSD and Linux, on Linux
+# systems we search for 'ctags', on FreeBSD for 'exctags'
+case $host in
+    # FreeBSD has exctags from the ctags port
+    *-freebsd1*)
+
+    # Extract the first word of "exctags", so it can be a program name with args.
+set dummy exctags; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_CTAGS_PROG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $CTAGS_PROG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_CTAGS_PROG="$CTAGS_PROG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_CTAGS_PROG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_CTAGS_PROG" && ac_cv_path_CTAGS_PROG="HAVE_CTAGS=no"
+  ;;
+esac
+fi
+CTAGS_PROG=$ac_cv_path_CTAGS_PROG
+if test -n "$CTAGS_PROG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CTAGS_PROG" >&5
+$as_echo "$CTAGS_PROG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+    ;;
+
+    *)
+    # Linux distributions have exuberant-ctags
+
+    # Extract the first word of "ctags", so it can be a program name with args.
 set dummy ctags; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -12920,6 +13186,7 @@ done
   done
 IFS=$as_save_IFS
 
+  test -z "$ac_cv_path_CTAGS_PROG" && ac_cv_path_CTAGS_PROG="HAVE_CTAGS=no"
   ;;
 esac
 fi
@@ -12933,23 +13200,28 @@ $as_echo "no" >&6; }
 fi
 
 
-if test "x$CTAGS_PROG" = "x"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: ==> Note: 'ctags' command not found!" >&5
-$as_echo "$as_me: ==> Note: 'ctags' command not found!" >&6;}
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Without ctags you will be unable to run the target 'update-map-file'!" >&5
+    ;;
+
+esac
+
+if test "x$HAVE_CTAGS" = "xno"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: ==> Note: '(ex)ctags' command not found!" >&5
+$as_echo "$as_me: ==> Note: '(ex)ctags' command not found!" >&6;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Without ctags you will be unable to run the target 'update-map-file'!" >&5
 $as_echo "$as_me: WARNING: ==> Without ctags you will be unable to run the target 'update-map-file'!" >&2;}
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> This is no problem if you just want to build the library libcoap." >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> This is no problem if you just want to build the library libcoap." >&5
 $as_echo "$as_me: WARNING: ==> This is no problem if you just want to build the library libcoap." >&2;}
-fi
-if ! "$CTAGS_PROG" --c-kinds=f /dev/null &>/dev/null; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: ==> Note: your ctags does not support '--c-kinds'!" >&5
-$as_echo "$as_me: ==> Note: your ctags does not support '--c-kinds'!" >&6;}
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: ==> Most likely, you are using the GNU Emacs ctag and not exuberant ctag" >&5
-$as_echo "$as_me: ==> Most likely, you are using the GNU Emacs ctag and not exuberant ctag" >&6;}
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> This option is required for target 'update-map-file'" >&5
-$as_echo "$as_me: WARNING: ==> This option is required for target 'update-map-file'" >&2;}
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> which is not a problem if you just want to build the library libcoap." >&5
+else
+    if test "`$CTAGS_PROG --help | grep '\--<LANG>-kinds'`" = ""; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: ==> Note: Your ctags binary does not support '--c-kinds'!" >&5
+$as_echo "$as_me: ==> Note: Your ctags binary does not support '--c-kinds'!" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: ==> Most likely, you are using the GNU Emacs ctag and not exuberant ctag." >&5
+$as_echo "$as_me: ==> Most likely, you are using the GNU Emacs ctag and not exuberant ctag." >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> This option is required for the target 'update-map-file'." >&5
+$as_echo "$as_me: WARNING: ==> This option is required for the target 'update-map-file'." >&2;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> which is not a problem if you just want to build the library libcoap." >&5
 $as_echo "$as_me: WARNING: ==> which is not a problem if you just want to build the library libcoap." >&2;}
+    fi
 fi
 
 # Checks for header files.
@@ -13187,51 +13459,57 @@ $as_echo_n "checking operating system... " >&6; }
 # The "ADDITIONAL_CFLAGS" is need as this stand-alone definition
 # for the doxygen part.
 case $host in
-	*-linux* | *-uclinux*)
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Linux" >&5
+    *-linux* | *-uclinux*)
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: Linux" >&5
 $as_echo "Linux" >&6; }
-	ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
+    ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
 
-	# Not yet needed but if some code definitions have to depend on the platform.
-	#AC_DEFINE(OS_LINUX, 1, [Linux backend])
-	#AC_SUBST(OS_LINUX)
-	;;
+    # Not yet needed but if some code definitions have to depend on the platform.
+    #AC_DEFINE(OS_LINUX, 1, [Linux backend])
+    #AC_SUBST(OS_LINUX)
+    ;;
 
-	*-solaris*)
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Solaris" >&5
+    *-solaris*)
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: Solaris" >&5
 $as_echo "Solaris" >&6; }
-	# set _XOPEN_SOURCE and _XOPEN_SOURCE_EXTENDED to enable XPG4v2 (POSIX 2004)
-	# set __EXTENSION__ to shut up feature test macros that restrict -std=c99
-	# to only C99 (and nothing newer)
-	ADDITIONAL_CFLAGS="-D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED=600 -D__EXTENSIONS__=1 -DWITH_POSIX"
-	;;
+    # set _XOPEN_SOURCE and _XOPEN_SOURCE_EXTENDED to enable XPG4v2 (POSIX 2004)
+    # set __EXTENSION__ to shut up feature test macros that restrict -std=c99
+    # to only C99 (and nothing newer)
+    ADDITIONAL_CFLAGS="-D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED=600 -D__EXTENSIONS__=1 -DWITH_POSIX"
+    ;;
 
-	*-darwin*)
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Darwin" >&5
+    *-darwin*)
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: Darwin" >&5
 $as_echo "Darwin" >&6; }
-	ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
+    ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
 
 
 $as_echo "#define __APPLE_USE_RFC_3542 1" >>confdefs.h
 
 
-	# Not yet needed but if some code definitions have to depend on the platform.
-	#AC_DEFINE(OS_MACOS, 1, [MacOS backend])
-	#AC_SUBST(OS_MACOS)
-	;;
+    # Not yet needed but if some code definitions have to depend on the platform.
+    #AC_DEFINE(OS_MACOS, 1, [MacOS backend])
+    #AC_SUBST(OS_MACOS)
+    ;;
 
-	*)
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Currently unsupported operating system ${host}!" >&5
-$as_echo "$as_me: WARNING: ==> Currently unsupported operating system ${host}!" >&2;}
-	as_fn_error $? "==> If you can provide patches to support your operating system please write to 'libcoap-developers@lists.sourceforge.net'." "$LINENO" 5
+    *-freebsd1*)
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: FreeBSD-1x" >&5
+$as_echo "FreeBSD-1x" >&6; }
+    ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
+    ;;
+
+    *)
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Currently unsupported operating system '${host}' !" >&5
+$as_echo "$as_me: WARNING: ==> Currently unsupported operating system '${host}' !" >&2;}
+    as_fn_error $? "==> If you can provide patches to support your operating system please write to 'libcoap-developers@lists.sourceforge.net'." "$LINENO" 5
 esac
 
 # Exporting the PREDEFINED_CFLAGS definition
-PREDEFINED_CFLAGS=`echo $ADDITIONAL_CFLAGS | sed -e 's/-D//g'`
+PREDEFINED_CFLAGS=`echo $ADDITIONAL_CFLAGS | $SED -e 's/-D//g'`
 
 
 # And finaly combining the CFLAGS together ...
-CFLAGS+=" $ADDITIONAL_CFLAGS"
+CFLAGS="$CFLAGS $ADDITIONAL_CFLAGS"
 
 # Override the various template files, currently just makefiles and the
 # pkgconfig *.pc file.
@@ -14984,7 +15262,6 @@ $as_echo X"$file" |
     cat <<_LT_EOF >> "$cfgfile"
 #! $SHELL
 # Generated automatically by $as_me ($PACKAGE) $VERSION
-# Libtool was configured on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 
 # Provide generalized library-building support services.
@@ -15564,41 +15841,41 @@ libcoap configuration summary:
       libcoap API version     : \"$LIBCOAP_API_VERSION\"
       host system             : \"$host\"" >&6; };
 if test "x$build_documentation" = "xyes" -a "x$DOXYGEN" != "x"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build documentation     : \"yes\"" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result:       build documentation     : \"yes\"" >&5
 $as_echo "      build documentation     : \"yes\"" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:           --> Doxygen around  : \"yes\" ($DOXYGEN $doxygen_version)" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result:           --> Doxygen around  : \"yes\" ($DOXYGEN $doxygen_version)" >&5
 $as_echo "          --> Doxygen around  : \"yes\" ($DOXYGEN $doxygen_version)" >&6; }
-	if test "x$DOT" = "x"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  dot around  : \"no\" (DOT not found!)" >&5
+    if test "x$DOT" = "x"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  dot around  : \"no\" (DOT not found!)" >&5
 $as_echo "             -->  dot around  : \"no\" (DOT not found!)" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  dot around  : \"yes\" ($DOT $dot_version)" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  dot around  : \"yes\" ($DOT $dot_version)" >&5
 $as_echo "             -->  dot around  : \"yes\" ($DOT $dot_version)" >&6; }
-	fi
+    fi
 else
-	if test "x$build_documentation" = "xno"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build documentation     : \"no\"" >&5
+    if test "x$build_documentation" = "xno"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result:       build documentation     : \"no\"" >&5
 $as_echo "      build documentation     : \"no\"" >&6; }
-	fi
+    fi
 fi
 if test "x$build_tests" = "xyes"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build unit test binary  : \"yes\"" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result:       build unit test binary  : \"yes\"" >&5
 $as_echo "      build unit test binary  : \"yes\"" >&6; }
 else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build unit test binary  : \"no\"" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result:       build unit test binary  : \"no\"" >&5
 $as_echo "      build unit test binary  : \"no\"" >&6; }
 fi
 if test "x$build_examples" = "xyes"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build examples          : \"yes\"" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result:       build examples          : \"yes\"" >&5
 $as_echo "      build examples          : \"yes\"" >&6; }
-	if test "x$A2X" != "x"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  use a2x     : \"yes\" ($A2X)" >&5
+    if test "x$A2X" != "x"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  use a2x     : \"yes\" ($A2X)" >&5
 $as_echo "             -->  use a2x     : \"yes\" ($A2X)" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  use a2x     : \"no\"" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result:              -->  use a2x     : \"no\"" >&5
 $as_echo "             -->  use a2x     : \"no\"" >&6; }
-	fi
+    fi
 else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result:       build examples          : \"no\"" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result:       build examples          : \"no\"" >&5
 $as_echo "      build examples          : \"no\"" >&6; }
 fi

@@ -72,17 +72,14 @@ typedef struct {
   coap_key_t item[COAP_MID_CACHE_SIZE];
 } coap_mid_cache_t;
 
-/**
- * The CoAP stack's global state is stored in a coap_context_t object. */
+/** The CoAP stack's global state is stored in a coap_context_t object */
 typedef struct coap_context_t {
   coap_opt_filter_t known_options;
-  /**
-   * < The hash table or list of known resources. */
-  struct coap_resource_t *resources;
+  struct coap_resource_t *resources; /**< hash table or list of known resources */
 
 #ifndef WITHOUT_ASYNC
   /**
-   * The list of asynchronous transactions. */
+   * list of asynchronous transactions */
   struct coap_async_state_t *async_state;
 #endif /* WITHOUT_ASYNC */
 
@@ -91,7 +88,7 @@ typedef struct coap_context_t {
    * to sendqueue_basetime. */
   coap_tick_t sendqueue_basetime;
   coap_queue_t *sendqueue;
-  coap_endpoint_t *endpoint;      /**< The endpoint used for listening. */
+  coap_endpoint_t *endpoint;      /**< the endpoint used for listening  */
 
 #ifdef WITH_POSIX
   int sockfd;                     /**< send/receive socket */

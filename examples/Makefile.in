@@ -117,7 +117,7 @@ am__coap_client_SOURCES_DIST = client.c coap_list.c
 @BUILD_EXAMPLES_TRUE@am_coap_client_OBJECTS = client.$(OBJEXT) \
 @BUILD_EXAMPLES_TRUE@	coap_list.$(OBJEXT)
 coap_client_OBJECTS = $(am_coap_client_OBJECTS)
-@BUILD_EXAMPLES_TRUE@coap_client_DEPENDENCIES = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@BUILD_EXAMPLES_TRUE@coap_client_DEPENDENCIES = $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -125,11 +125,11 @@ am__v_lt_1 =
 am__coap_rd_SOURCES_DIST = coap-rd.c
 @BUILD_EXAMPLES_TRUE@am_coap_rd_OBJECTS = coap-rd.$(OBJEXT)
 coap_rd_OBJECTS = $(am_coap_rd_OBJECTS)
-@BUILD_EXAMPLES_TRUE@coap_rd_DEPENDENCIES = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@BUILD_EXAMPLES_TRUE@coap_rd_DEPENDENCIES = $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 am__coap_server_SOURCES_DIST = coap-server.c
 @BUILD_EXAMPLES_TRUE@am_coap_server_OBJECTS = coap-server.$(OBJEXT)
 coap_server_OBJECTS = $(am_coap_server_OBJECTS)
-@BUILD_EXAMPLES_TRUE@coap_server_DEPENDENCIES = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@BUILD_EXAMPLES_TRUE@coap_server_DEPENDENCIES = $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -241,6 +241,7 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CTAGS_PROG = @CTAGS_PROG@
+CUNIT_CFLAGS = @CUNIT_CFLAGS@
 CUNIT_LIBS = @CUNIT_LIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -295,6 +296,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PREDEFINED_CFLAGS = @PREDEFINED_CFLAGS@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -362,13 +366,13 @@ top_srcdir = @top_srcdir@
 # just do nothing if 'BUILD_EXAMPLES' isn't defined
 
 # picking up the default warning CFLAGS into AM_CFLAGS
-@BUILD_EXAMPLES_TRUE@AM_CFLAGS = -isystem@top_builddir@/include/coap/ $(WARNING_CFLAGS) -std=c99
+@BUILD_EXAMPLES_TRUE@AM_CFLAGS = -isystem$(top_builddir)/include/coap -I$(top_srcdir)/include/coap $(WARNING_CFLAGS) -std=c99
 @BUILD_EXAMPLES_TRUE@coap_client_SOURCES = client.c coap_list.c
-@BUILD_EXAMPLES_TRUE@coap_client_LDADD = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@BUILD_EXAMPLES_TRUE@coap_client_LDADD = $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 @BUILD_EXAMPLES_TRUE@coap_server_SOURCES = coap-server.c
-@BUILD_EXAMPLES_TRUE@coap_server_LDADD = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@BUILD_EXAMPLES_TRUE@coap_server_LDADD = $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 @BUILD_EXAMPLES_TRUE@coap_rd_SOURCES = coap-rd.c
-@BUILD_EXAMPLES_TRUE@coap_rd_LDADD = @top_builddir@/.libs/libcoap-$(LIBCOAP_API_VERSION).la
+@BUILD_EXAMPLES_TRUE@coap_rd_LDADD = $(top_builddir)/.libs/libcoap-$(LIBCOAP_API_VERSION).la
 
 # build manuals only if 'BUILD_DOCUMENTATION' is defined
 
