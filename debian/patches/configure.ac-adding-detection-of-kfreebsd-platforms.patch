@@ -7,9 +7,191 @@ and GNU C library (libc) used for the applications. After adding FreeBSD
 support for libcoap no more changes needed to get libcoap compiled with
 a kFreeBSD installation.
 ---
- configure.ac | 5 +++++
- 1 file changed, 5 insertions(+)
+ config.guess | 28 ++++++++++++++++++----------
+ config.sub   | 22 ++++++++++++++++------
+ configure    |  6 ++++++
+ configure.ac |  5 +++++
+ 4 files changed, 45 insertions(+), 16 deletions(-)
 
+diff --git a/config.guess b/config.guess
+index 0967f2a..2e9ad7f 100755
+--- a/config.guess
++++ b/config.guess
+@@ -2,7 +2,7 @@
+ # Attempt to guess a canonical system name.
+ #   Copyright 1992-2016 Free Software Foundation, Inc.
+ 
+-timestamp='2016-04-02'
++timestamp='2016-10-02'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -186,9 +186,12 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 	    *) machine=${UNAME_MACHINE_ARCH}-unknown ;;
+ 	esac
+ 	# The Operating System including object format, if it has switched
+-	# to ELF recently, or will in the future.
++	# to ELF recently (or will in the future) and ABI.
+ 	case "${UNAME_MACHINE_ARCH}" in
+-	    arm*|earm*|i386|m68k|ns32k|sh3*|sparc|vax)
++	    earm*)
++		os=netbsdelf
++		;;
++	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
+ 		eval $set_cc_for_build
+ 		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
+ 			| grep -q __ELF__
+@@ -997,6 +1000,9 @@ EOF
+ 	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
+ 	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
+ 	;;
++    mips64el:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     openrisc*:Linux:*:*)
+ 	echo or1k-unknown-linux-${LIBC}
+ 	exit ;;
+@@ -1029,6 +1035,9 @@ EOF
+     ppcle:Linux:*:*)
+ 	echo powerpcle-unknown-linux-${LIBC}
+ 	exit ;;
++    riscv32:Linux:*:* | riscv64:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux-${LIBC}
+ 	exit ;;
+@@ -1408,18 +1417,17 @@ esac
+ cat >&2 <<EOF
+ $0: unable to guess system type
+ 
+-This script, last modified $timestamp, has failed to recognize
+-the operating system you are using. It is advised that you
+-download the most up to date version of the config scripts from
++This script (version $timestamp), has failed to recognize the
++operating system you are using. If your script is old, overwrite
++config.guess and config.sub with the latest versions from:
+ 
+   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess
+ and
+   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub
+ 
+-If the version you run ($0) is already up to date, please
+-send the following data and any information you think might be
+-pertinent to <config-patches@gnu.org> in order to provide the needed
+-information to handle your system.
++If $0 has already been updated, send the following data and any
++information you think might be pertinent to config-patches@gnu.org to
++provide the necessary information to handle your system.
+ 
+ config.guess timestamp = $timestamp
+ 
+diff --git a/config.sub b/config.sub
+index 8d39c4b..dd2ca93 100755
+--- a/config.sub
++++ b/config.sub
+@@ -2,7 +2,7 @@
+ # Configuration validation subroutine script.
+ #   Copyright 1992-2016 Free Software Foundation, Inc.
+ 
+-timestamp='2016-03-30'
++timestamp='2016-11-04'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -117,7 +117,7 @@ case $maybe_os in
+   nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | \
+   linux-musl* | linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | \
+   knetbsd*-gnu* | netbsd*-gnu* | netbsd*-eabi* | \
+-  kopensolaris*-gnu* | \
++  kopensolaris*-gnu* | cloudabi*-eabi* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
+@@ -301,6 +301,7 @@ case $basic_machine in
+ 	| open8 | or1k | or1knd | or32 \
+ 	| pdp10 | pdp11 | pj | pjl \
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle \
++	| pru \
+ 	| pyramid \
+ 	| riscv32 | riscv64 \
+ 	| rl78 | rx \
+@@ -428,6 +429,7 @@ case $basic_machine in
+ 	| orion-* \
+ 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
+ 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* \
++	| pru-* \
+ 	| pyramid-* \
+ 	| riscv32-* | riscv64-* \
+ 	| rl78-* | romp-* | rs6000-* | rx-* \
+@@ -643,6 +645,14 @@ case $basic_machine in
+ 		basic_machine=m68k-bull
+ 		os=-sysv3
+ 		;;
++	e500v[12])
++		basic_machine=powerpc-unknown
++		os=$os"spe"
++		;;
++	e500v[12]-*)
++		basic_machine=powerpc-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=$os"spe"
++		;;
+ 	ebmon29k)
+ 		basic_machine=a29k-amd
+ 		os=-ebmon
+@@ -1022,7 +1032,7 @@ case $basic_machine in
+ 	ppc-* | ppcbe-*)
+ 		basic_machine=powerpc-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
+-	ppcle | powerpclittle | ppc-le | powerpc-little)
++	ppcle | powerpclittle)
+ 		basic_machine=powerpcle-unknown
+ 		;;
+ 	ppcle-* | powerpclittle-*)
+@@ -1032,7 +1042,7 @@ case $basic_machine in
+ 		;;
+ 	ppc64-*) basic_machine=powerpc64-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
+-	ppc64le | powerpc64little | ppc64-le | powerpc64-little)
++	ppc64le | powerpc64little)
+ 		basic_machine=powerpc64le-unknown
+ 		;;
+ 	ppc64le-* | powerpc64little-*)
+@@ -1389,7 +1399,7 @@ case $os in
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+-	      | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
++	      | -midipix* | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
+ 	      | -linux-newlib* | -linux-musl* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* | -moxiebox* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+@@ -1399,7 +1409,7 @@ case $os in
+ 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
+ 	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
+ 	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es* \
+-	      | -onefs* | -tirtos*)
++	      | -onefs* | -tirtos* | -phoenix* | -fuchsia*)
+ 	# Remember, each alternative MUST END IN *, to match a version number.
+ 		;;
+ 	-qnx*)
+diff --git a/configure b/configure
+index 4b3ccce..cc0a231 100755
+--- a/configure
++++ b/configure
+@@ -13498,6 +13498,12 @@ $as_echo "FreeBSD-1x" >&6; }
+     ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
+     ;;
+ 
++    *kfreebsd*)
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: kFreeBSD" >&5
++$as_echo "kFreeBSD" >&6; }
++    ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
++    ;;
++
+     *)
+     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: ==> Currently unsupported operating system '${host}' !" >&5
+ $as_echo "$as_me: WARNING: ==> Currently unsupported operating system '${host}' !" >&2;}
 diff --git a/configure.ac b/configure.ac
 index 4221073..d81f376 100644
 --- a/configure.ac
