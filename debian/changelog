@@ -1,3 +1,11 @@
+libcoap (4.1.2~rc+git20161120-3) unstable; urgency=medium
+
+  * [99d18f6] rebuild patch queue from patchqueue branch
+              - fixup of the previous added patch, the configure script itself
+                needs to be updated as well
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Wed, 23 Nov 2016 20:20:11 +0100
+
 libcoap (4.1.2~rc+git20161120-2) unstable; urgency=medium
 
   * [67d9af7] rebuild patch queue from patchqueue branch
