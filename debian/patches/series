@@ -1,1 +1,2 @@
 add-field-revdate-to-asciidoc-files-for-manpages.patch
+configure.ac-adding-detection-of-kfreebsd-platforms.patch

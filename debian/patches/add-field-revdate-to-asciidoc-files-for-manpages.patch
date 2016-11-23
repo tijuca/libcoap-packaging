@@ -13,7 +13,7 @@ from the changelog file.
  3 files changed, 3 insertions(+)
 
 diff --git a/examples/coap-client.txt.in b/examples/coap-client.txt.in
-index 88117bd..0e9c354 100644
+index ee0f7ac..8719b25 100644
 --- a/examples/coap-client.txt.in
 +++ b/examples/coap-client.txt.in
 @@ -4,6 +4,7 @@

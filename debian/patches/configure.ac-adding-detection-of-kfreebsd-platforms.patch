@@ -1,0 +1,28 @@
+From: Carsten Schoenert <c.schoenert@t-online.de>
+Date: Wed, 23 Nov 2016 19:36:41 +0100
+Subject: configure.ac: adding detection of kfreebsd platforms
+
+kFreeBSD is a modificated FreeBSD system by Debian with a FreeBSD kernel
+and GNU C library (libc) used for the applications. After adding FreeBSD
+support for libcoap no more changes needed to get libcoap compiled with
+a kFreeBSD installation.
+---
+ configure.ac | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 4221073..d81f376 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -347,6 +347,11 @@ case $host in
+     ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
+     ;;
+ 
++    *kfreebsd*)
++    AC_MSG_RESULT([kFreeBSD])
++    ADDITIONAL_CFLAGS="-D_GNU_SOURCE -DWITH_POSIX"
++    ;;
++
+     *)
+     AC_MSG_WARN([==> Currently unsupported operating system '${host}' !])
+     AC_MSG_ERROR([==> If you can provide patches to support your operating system please write to 'libcoap-developers@lists.sourceforge.net'.])
