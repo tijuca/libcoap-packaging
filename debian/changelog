@@ -1,3 +1,11 @@
+libcoap (4.1.2~rc+git20161120-2) unstable; urgency=medium
+
+  * [67d9af7] rebuild patch queue from patchqueue branch
+              - adding kFreeBSD to the platform detection within configure.ac
+                (Closes: #829623)
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Wed, 23 Nov 2016 19:50:48 +0100
+
 libcoap (4.1.2~rc+git20161120-1) unstable; urgency=medium
 
   * [7c39e8e] debian/control: Update of the project homepage
