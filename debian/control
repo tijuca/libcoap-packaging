@@ -8,6 +8,7 @@ Build-Depends: asciidoc,
   exuberant-ctags,
   doxygen,
   graphviz,
+  pkg-config,
   xmlto
 Standards-Version: 3.9.8
 Homepage: https://libcoap.net/
