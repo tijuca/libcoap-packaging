@@ -1,3 +1,2 @@
 Tests: tests.sh
 Depends: libcoap-1-0-bin,
-Restrictions: allow-stderr
