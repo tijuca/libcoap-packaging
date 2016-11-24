@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian IoT Maintainers <debian-iot-maintainers@lists.alioth.debian.org>
 Uploaders: Carsten Schoenert <c.schoenert@t-online.de>
 Build-Depends: asciidoc,
-  debhelper (>= 9.0.0),
+  debhelper (>= 10.2.2~),
   exuberant-ctags,
   doxygen,
   graphviz,
