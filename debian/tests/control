@@ -1,3 +1,3 @@
 Tests: tests.sh
-Depends: libcoap-1-0-bin, libcoap-1-0-dev, pkg-config
+Depends: gcc, libcoap-1-0-bin, libcoap-1-0-dev, pkg-config
 Restrictions: allow-stderr
