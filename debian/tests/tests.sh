@@ -5,8 +5,6 @@ set -x
 
 cd debian/tests
 
-apt-get -y install libcoap-1-0-bin libcoap-1-0-dev pkg-config
-
 echo "Compiling, linking the CoAP testing server ..."
 gcc -g -o coap-test-server coap-test-server.c -O2 -D_GNU_SOURCE -DWITH_POSIX `pkg-config --libs libcoap-1`
 [ "$?" != "0" ] && echo "Failed!" && exit 1
