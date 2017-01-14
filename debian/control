@@ -2,14 +2,16 @@ Source: libcoap
 Section: libs
 Priority: optional
 Maintainer: Debian IoT Maintainers <debian-iot-maintainers@lists.alioth.debian.org>
-Uploaders: Carsten Schoenert <c.schoenert@t-online.de>
-Build-Depends: asciidoc,
-  debhelper (>= 10.2.2~),
-  exuberant-ctags,
-  doxygen,
-  graphviz,
-  pkg-config,
-  xmlto
+Uploaders:
+ Carsten Schoenert <c.schoenert@t-online.de>,
+Build-Depends:
+ asciidoc,
+ debhelper (>= 10.2.2~),
+ doxygen,
+ exuberant-ctags,
+ graphviz,
+ pkg-config,
+ xmlto,
 Standards-Version: 3.9.8
 Homepage: https://libcoap.net/
 Vcs-Browser: https://anonscm.debian.org/cgit/debian-iot/libcoap.git
@@ -18,7 +20,9 @@ Vcs-Git: https://anonscm.debian.org/git/debian-iot/libcoap.git
 Package: libcoap-1-0
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
 Description: C-Implementation of CoAP
  Lightweight application-protocol for devices that are constrained their
  resources such as computing power, RF range, memory, bandwidth, or network
@@ -27,8 +31,10 @@ Description: C-Implementation of CoAP
 
 Package: libcoap-1-0-bin
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends},
-  libcoap-1-0 (= ${binary:Version})
+Depends:
+ libcoap-1-0 (= ${binary:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
 Description: C-Implementation of CoAP - example binaries
  The libcoap provide some example binary files to show the usage of  a CoAP
  Server, CoAP Client and a Resource Directory implementation. These examples
@@ -52,8 +58,10 @@ Package: libcoap-1-0-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends}, ${shlibs:Depends},
-  libcoap-1-0 (= ${binary:Version})
+Depends:
+ libcoap-1-0 (= ${binary:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
 Description: C-Implementation of CoAP - development files
  Lightweight application-protocol for devices that are constrained their
  resources such as computing power, RF range, memory, bandwidth, or network
@@ -67,8 +75,12 @@ Package: libcoap-1-0-doc
 Section: doc
 Architecture: all
 Multi-Arch: foreign
-Depends: ${misc:Depends}, libjs-jquery
-Recommends: libcoap-1-0-dev (= ${binary:Version}), www-browser
+Depends:
+ libjs-jquery,
+ ${misc:Depends},
+Recommends:
+ libcoap-1-0-dev (= ${binary:Version}),
+ www-browser,
 Description: C-Implementation of CoAP - HTML based documentation files
  Lightweight application-protocol for devices that are constrained their
  resources such as computing power, RF range, memory, bandwidth, or network
