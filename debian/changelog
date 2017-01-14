@@ -1,3 +1,12 @@
+libcoap (4.1.2~rc+git20161120-5) unstable; urgency=medium
+
+  * [08d93f1] travis: add .travis.yml from http://travis.debian.net.
+  * [443f91b] travis: adding option to ignore travis service file
+  * [dbb64c6] autopkgtests: move package dependencies into d/t/control
+  * [6b97b00] tests.sh: improve script output
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Sat, 14 Jan 2017 12:28:18 +0100
+
 libcoap (4.1.2~rc+git20161120-4) unstable; urgency=medium
 
   * [47b1f43] debian/control: adding new missed B-D on pkg-config
