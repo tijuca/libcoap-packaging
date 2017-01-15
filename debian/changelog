@@ -1,3 +1,10 @@
+libcoap (4.1.2~rc+git20161120-6) unstable; urgency=medium
+
+  * [66b8361] autopkg: adding gcc to the needed packages
+    (hopefully autopkgtests will now work)
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Sun, 15 Jan 2017 11:55:23 +0100
+
 libcoap (4.1.2~rc+git20161120-5) unstable; urgency=medium
 
   * [08d93f1] travis: add .travis.yml from http://travis.debian.net.
