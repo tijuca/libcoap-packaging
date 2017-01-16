@@ -1,3 +1,9 @@
+libcoap (4.1.2~rc+git20161120-7) unstable; urgency=medium
+
+  * [952c06c] debian/control: adding dependency to *-dev package
+
+ -- Carsten Schoenert <c.schoenert@t-online.de>  Mon, 16 Jan 2017 19:42:32 +0100
+
 libcoap (4.1.2~rc+git20161120-6) unstable; urgency=medium
 
   * [66b8361] autopkg: adding gcc to the needed packages
